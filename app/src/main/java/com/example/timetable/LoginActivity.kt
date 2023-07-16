@@ -1,16 +1,14 @@
 package com.example.timetable
 
-import android.nfc.Tag
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import org.json.JSONArray
-import org.json.JSONObject
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,6 +18,7 @@ class LoginActivity : AppCompatActivity() {
     var TAG = "LoginActivity"
     lateinit var schoolName : EditText
     lateinit var searchSchoolName: TextView
+    lateinit var schoolInfoRecyclerView : RecyclerView
     var schoolCheck = false
     var gradeCheck = false
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,9 +44,23 @@ class LoginActivity : AppCompatActivity() {
                         if(response.isSuccessful){
                             // 정상적으로 통신이 성고된 경우
                             var test: String = response.body()?.schoolInfo.toString()
-                            var result: String = response.body()?.schoolInfo?.get(1)?.row.toString()
-                            Log.d(TAG, "onResponse 성공: " + result);
-                            Log.d(TAG, "onResponse:111 "+test)
+                            if(response.body()?.schoolInfo == null){
+                                Toast.makeText(applicationContext,"검색결과가 없습니다",Toast.LENGTH_SHORT).show()
+                                Log.d(TAG, "onResponse: ${response.body()?.schoolInfo.toString()}")
+                            }else{
+                                var result: List<schoolInfoData.SchoolInfo.Row> = response.body()?.schoolInfo?.get(1)?.row!!.toList()
+                                Log.d(TAG, "onResponse 성공: " + result);
+                                Log.d(TAG, "onResponse:111 "+result[0].SCHUL_NM)
+                                var adapter = SchoolInfoAdapter(applicationContext, result)
+                                schoolInfoRecyclerView = findViewById(R.id.schoolInfoList)
+                                schoolInfoRecyclerView.setHasFixedSize(true)
+                                schoolInfoRecyclerView.setLayoutManager(LinearLayoutManager(applicationContext))
+                                // RecyclerView 에 Adapter 를 할당합니다.
+                                schoolInfoRecyclerView.adapter = adapter
+                                adapter.notifyDataSetChanged()
+                            }
+
+
                         }else{
                             // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
                             Log.d(TAG, "onResponse 실패")

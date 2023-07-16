@@ -43,4 +43,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.117" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/schoolInfoList"
+        android:orientation="vertical"
+        tools:listitem="@layout/school_info_item"
+        android:layout_width="409dp"
+        android:layout_height="608dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/school_name" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
