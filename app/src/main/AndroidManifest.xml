@@ -15,6 +15,9 @@
         android:theme="@style/Theme.Timetable"
         tools:targetApi="31">
         <activity
+            android:name=".SchoolInfoDialog"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity

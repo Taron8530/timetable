@@ -7,15 +7,29 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-class SchoolInfoAdapter (private val context: Context, private val datas: List<schoolInfoData.SchoolInfo.Row>) : RecyclerView.Adapter<SchoolInfoAdapter.ViewHolder>() {
+class SchoolInfoAdapter (private val context: Context, private var datas: List<schoolInfoData.SchoolInfo.Row>) : RecyclerView.Adapter<SchoolInfoAdapter.ViewHolder>() {
     var TAG = "SchoolInfoAdapter"
+    private lateinit var onClickListener : SchoolInfoAdapter.OnclickListener
+    fun setOnClickListener(listener: SchoolInfoAdapter.OnclickListener)
+    {
+        onClickListener = listener
+    }
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
+        private val itemView = view
         private val schoolName = view.findViewById<TextView>(R.id.school_name_item)
         private val schoolLocation = view.findViewById<TextView>(R.id.school_location_item)
-
         fun bind(items : schoolInfoData.SchoolInfo.Row){
+            itemView.setOnClickListener(object : View.OnClickListener{
+                override fun onClick(v: View?) {
+                    if(onClickListener != null){
+                        onClickListener.onclick(adapterPosition)
+                    }
+                }
+
+            })
             schoolName.text = items.SCHUL_NM
             schoolLocation.text = items.ORG_RDNMA
+
             Log.d(TAG, "bind: 호출됨 " + items.SCHUL_NM)
         }
 
@@ -35,5 +49,11 @@ class SchoolInfoAdapter (private val context: Context, private val datas: List<s
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Log.d(TAG, "onBindViewHolder: 호출됨 position[$position]")
         holder.bind(datas[position])
+    }
+    fun setList( datas : List<schoolInfoData.SchoolInfo.Row>){
+        this.datas = datas
+    }
+    interface OnclickListener{
+        fun onclick(position: Int)
     }
 }
