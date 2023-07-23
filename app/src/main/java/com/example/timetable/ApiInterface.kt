@@ -27,6 +27,15 @@ interface ApiInterface {
         @Query("GRADE") grade:String,
         @Query("CLASS_NM") classNum:String
     ) : Call<JSONArray>
+    @GET("schoolMajorinfo")
+    fun getSchoolDepartmentInfo(
+        @Query("KEY") key: String,
+        @Query("Type") type : String,
+        @Query("pIndex") pIndex : Int,
+        @Query("pSize") pSize : Int,
+        @Query("ATPT_OFCDC_SC_CODE") scCode: String,
+        @Query("SD_SCHUL_CODE") schoolCode : String,
+    )
 //    @GET("schoolInfo")
 //    fun getSchoolInfo(
 //        @Query("KEY") key: String,

@@ -26,6 +26,7 @@
         android:layout_marginTop="28dp"
         android:textSize="15dp"
         android:hint="학교 이름을 적어주세요"
+        android:layout_marginStart="10dp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toStartOf="@+id/search_button"
         app:layout_constraintHorizontal_bias="0.0"
@@ -36,21 +37,57 @@
         android:id="@+id/search_button"
         android:layout_width="55dp"
         android:layout_height="40dp"
-        android:text="검색"
         android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="검색"
+        app:layout_constraintBottom_toBottomOf="@+id/school_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.117" />
+        app:layout_constraintVertical_bias="1.0" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/schoolInfoList"
-        android:orientation="vertical"
-        tools:listitem="@layout/school_info_item"
-        android:layout_width="409dp"
-        android:layout_height="608dp"
-        app:layout_constraintEnd_toEndOf="parent"
+    <Spinner
+        android:id="@+id/school_department"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/school_name"
+        app:layout_goneMarginStart="10dp" />
+
+    <Spinner
+        android:id="@+id/school_Grade"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@+id/school_department"
         app:layout_constraintTop_toBottomOf="@+id/school_name" />
+
+    <Spinner
+        android:id="@+id/school_Class_Number"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/school_Grade"
+        app:layout_constraintTop_toBottomOf="@+id/school_name" />
+
+    <Button
+        android:id="@+id/login_start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintVertical_bias="0.035"
+        android:layout_marginHorizontal="10dp"
+        android:text="확인"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.479"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/school_Grade" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

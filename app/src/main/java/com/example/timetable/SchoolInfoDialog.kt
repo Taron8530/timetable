@@ -3,7 +3,10 @@ package com.example.timetable
 import android.app.Dialog
 import android.content.Context
 import android.util.Log
+import android.view.View
 import android.view.WindowManager
+import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +21,8 @@ class SchoolInfoDialog(private val context : Context,private var schoolName : St
     private lateinit var onClickListener : OnDialogClickListener
     private lateinit var schoolInfoAdapter : SchoolInfoAdapter
     private var data = listOf<schoolInfoData.SchoolInfo.Row>()
+    lateinit var progressBar : ProgressBar
+    lateinit var progressBarComment : TextView
     fun setOnClickListener(listener: OnDialogClickListener)
     {
         onClickListener = listener
@@ -25,10 +30,6 @@ class SchoolInfoDialog(private val context : Context,private var schoolName : St
     fun showDialog(){
         initView()
         getSchoolInfo()
-        dialog.window!!.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
-        dialog.setCanceledOnTouchOutside(true)
-        dialog.setCancelable(true)
-        dialog.show()
 
     }
     fun initView(){
@@ -38,10 +39,18 @@ class SchoolInfoDialog(private val context : Context,private var schoolName : St
         schoolInfoAdapter.setOnClickListener(object : SchoolInfoAdapter.OnclickListener{
             override fun onclick(position: Int) {
                 onClickListener.onClicked(data.get(position))
+                dialog.dismiss()
             }
 
 
         })
+        progressBarComment = dialog.findViewById(R.id.school_progressBar_comment)
+        progressBar = dialog.findViewById(R.id.school_progressBar)
+        showProgress(true)
+        dialog.window!!.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
+        dialog.setCanceledOnTouchOutside(true)
+        dialog.setCancelable(true)
+        dialog.show()
     }
     fun getSchoolInfo(){
         var Api : ApiInterface = ApiClient.getRetrofit().create(ApiInterface::class.java)
@@ -49,7 +58,7 @@ class SchoolInfoDialog(private val context : Context,private var schoolName : St
             context.resources.getString(R.string.education_api_key),
             "JSON",
             1,
-            10,
+            40,
             context.resources.getString(R.string.area_code),
             schoolName
         )
@@ -72,11 +81,15 @@ class SchoolInfoDialog(private val context : Context,private var schoolName : St
                         schoolInfo.adapter = schoolInfoAdapter
                         schoolInfoAdapter.setList(result)
                         data = result
+                        showProgress(false)
                         schoolInfoAdapter.notifyDataSetChanged()
                     }
 
 
                 }else{
+                    showProgress(false)
+                    Toast.makeText(context,"네트워크 환경을 확인하여 주십시오.",Toast.LENGTH_SHORT).show()
+                    dialog.dismiss()
                     // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
                     Log.d(TAG, "onResponse 실패")
                 }
@@ -84,6 +97,9 @@ class SchoolInfoDialog(private val context : Context,private var schoolName : St
 
             override fun onFailure(call: Call<schoolInfoData>, t: Throwable) {
                 // 통신 실패 (인터넷 끊킴, 예외 발생 등 시스템적인 이유)
+                showProgress(false)
+                dialog.dismiss()
+                Toast.makeText(context,"네트워크 환경을 확인하여 주십시오.",Toast.LENGTH_SHORT).show()
                 Log.d(TAG, "onFailure 에러: " + t.message.toString());
             }
         })
@@ -91,5 +107,14 @@ class SchoolInfoDialog(private val context : Context,private var schoolName : St
     interface OnDialogClickListener
     {
         fun onClicked(schoolInfo : schoolInfoData.SchoolInfo.Row)
+    }
+    fun showProgress(isShow : Boolean){
+        if(isShow){
+            progressBar.visibility = View.VISIBLE
+            progressBarComment.visibility = View.VISIBLE
+        }else{
+            progressBar.visibility = View.GONE
+            progressBarComment.visibility = View.GONE
+        }
     }
 }
