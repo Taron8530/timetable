@@ -42,7 +42,6 @@ class SchoolInfoAdapter (private val context: Context, private var datas: List<s
     }
 
     override fun getItemCount(): Int {
-        Log.d(TAG, "getItemCount: ${datas.size}")
         return datas.size
     }
 

@@ -35,7 +35,7 @@ interface ApiInterface {
         @Query("pSize") pSize : Int,
         @Query("ATPT_OFCDC_SC_CODE") scCode: String,
         @Query("SD_SCHUL_CODE") schoolCode : String,
-    )
+    ) : Call<SchoolDepartmentData>
 //    @GET("schoolInfo")
 //    fun getSchoolInfo(
 //        @Query("KEY") key: String,
