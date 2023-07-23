@@ -65,6 +65,7 @@ class LoginActivity : AppCompatActivity() {
                                     if(response.isSuccessful){
                                         Log.d(TAG, "onResponse: 학과 정보 불러옴 ${response.body()?.schoolMajorinfo?.get(1)?.row}}")
                                         if(response.body()?.schoolMajorinfo?.get(1)?.row != null){
+                                            schoolDepartment.clear()
                                             for(i in response.body()?.schoolMajorinfo?.get(1)?.row!!){
                                                 schoolDepartment.add(i.DDDEP_NM)
                                                 Log.d(TAG, "onResponse: ${i.DDDEP_NM} ")

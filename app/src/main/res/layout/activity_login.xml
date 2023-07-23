@@ -47,7 +47,7 @@
     <Spinner
         android:id="@+id/school_department"
         android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="8dp"
         android:visibility="gone"
@@ -58,7 +58,7 @@
     <Spinner
         android:id="@+id/school_Grade"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="45dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toEndOf="@+id/school_department"
@@ -67,7 +67,7 @@
     <Spinner
         android:id="@+id/school_Class_Number"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="45dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="20dp"
