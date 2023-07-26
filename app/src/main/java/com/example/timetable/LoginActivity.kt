@@ -53,6 +53,8 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        checkLogin()
+
         initView()
 
         initOnClickListener()
@@ -180,21 +182,41 @@ class LoginActivity : AppCompatActivity() {
         })
         signInButton.setOnClickListener(View.OnClickListener {
             val checked = classCheck && gradeCheck && schoolCheck && departmentCheck
+            val dialogMessage = DialogMessage(applicationContext)
             Log.d(TAG, "다 체크되었는지 확인 ${checked} 학교 선택 ${schoolCheck} 학년 선택 ${gradeCheck} 학과 선택 ${departmentCheck} 반 선택 ${classCheck}")
-            if(checked){
+            if(checked) {
                 val sharedPreferences = getSharedPreferences("Userinfo", MODE_PRIVATE)
                 var editor = sharedPreferences.edit()
-                editor.putString("schoolCode",selectSchoolInfo.SD_SCHUL_CODE)
-                editor.putString("grade",gradeNumber)
-                editor.putString("classNumber",classNumber)
-                editor.putString("department",department)
+                editor.putString("schoolCode", selectSchoolInfo.SD_SCHUL_CODE)
+                editor.putString("grade", gradeNumber)
+                editor.putString("classNumber", classNumber)
+                editor.putString("department", department)
                 editor.putString("schoolName", selectSchoolInfo.SCHUL_NM)
-                editor.putString("line",selectSchoolInfo.HS_SC_NM)
-                editor.apply()
+                editor.putString("line", selectSchoolInfo.HS_SC_NM)
+                if (editor.commit()) {
+                    var intent = Intent(applicationContext, MainActivity::class.java)
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(
+                        applicationContext,
+                        "오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
 
+            }else if(!schoolCheck){
+                Toast.makeText(applicationContext, "학교를 선택해주세요.", Toast.LENGTH_SHORT).show()
+            }else if(!departmentCheck){
+                Toast.makeText(applicationContext, "학과를 선택해주세요.", Toast.LENGTH_SHORT).show()
+            }else if(!classCheck){
+                Toast.makeText(applicationContext, "반을 선택해주세요.", Toast.LENGTH_SHORT).show()
+            }else if(!gradeCheck){
+                Toast.makeText(applicationContext, "학년을 선택해주세요.", Toast.LENGTH_SHORT).show()
             }
         })
     }
+
+
 
     fun onItemSelectSpinner() {
         schoolClassSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -238,6 +260,14 @@ class LoginActivity : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 Log.d(TAG, "onNothingSelected: 아무것도 선택되지 않음.")
             }
+        }
+    }
+    fun checkLogin(){
+        var sharedPreferences = getSharedPreferences("Userinfo",0)
+        var schoolCode = sharedPreferences.getString("schoolCode","")
+        if(!schoolCode.equals("")){
+            var intent = Intent(applicationContext,MainActivity ::class.java)
+            startActivity(intent)
         }
     }
 }
