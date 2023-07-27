@@ -10,6 +10,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class MainActivity : AppCompatActivity() {
     lateinit var homeFragment : HomeFragment
     lateinit var timeTableFragment : TimeTableFragment
+    lateinit var profileFragment : ProfileFragment
     lateinit var schoolCode : String
     lateinit var department : String
     lateinit var grade : String
@@ -24,8 +25,10 @@ class MainActivity : AppCompatActivity() {
     }
     fun init(){
         getSharedPreference()
-        homeFragment = HomeFragment(schoolCode, department, grade, classNum)
+        var schoolInfo = SchoolInfo(schoolCode, line,department, grade, classNum)
+        homeFragment = HomeFragment(schoolInfo)
         timeTableFragment = TimeTableFragment()
+        profileFragment = ProfileFragment(schoolInfo)
 
         var bnv_main = findViewById(R.id.mainBottomNavigationView) as BottomNavigationView
         bnv_main.run { setOnNavigationItemSelectedListener {
@@ -40,6 +43,9 @@ class MainActivity : AppCompatActivity() {
 //                    val settingFragment = SettingFragment()
 //                    supportFragmentManager.beginTransaction().replace(R.id.fl_container, settingFragment).commit()
                 }
+                R.id.account -> {
+                    supportFragmentManager.beginTransaction().replace(R.id.fl_container, profileFragment).commit()
+                }
             }
             true
         }
@@ -47,6 +53,8 @@ class MainActivity : AppCompatActivity() {
         }
         initTopBar()
     }
+
+
     fun initTopBar(){
         var topBar = findViewById<TextView>(R.id.homeFragmentTopBar)
         var schoolNmae = getSharedPreferenceKey("schoolName")

@@ -179,6 +179,7 @@ class LoginActivity : AppCompatActivity() {
             searchSchoolName.isClickable = true
             searchSchoolName.setBackgroundColor(getColor(R.color.white))
             schoolName.setBackgroundColor(resources.getColor(R.color.white))
+            schoolDepartmentSpinner.visibility = View.GONE
         })
         signInButton.setOnClickListener(View.OnClickListener {
             val checked = classCheck && gradeCheck && schoolCheck && departmentCheck

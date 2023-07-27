@@ -23,10 +23,11 @@ interface ApiInterface {
         @Query("pSize") pSize: Int,
         @Query("ATPT_OFCDC_SC_CODE") scCode: String,
         @Query("SD_SCHUL_CODE") schoolCode:String,
-        @Query("ALL_TI_YMD") timeTableWeek:String,
+        @Query("TI_FROM_YMD") startDate:String,
+        @Query("TI_TO_YMD") endDate:String,
         @Query("GRADE") grade:String,
         @Query("CLASS_NM") classNum:String
-    ) : Call<JSONArray>
+    ) : Call<HisTimeTableData.HisTimetable>
     @GET("schoolMajorinfo")
     fun getSchoolDepartmentInfo(
         @Query("KEY") key: String,
@@ -36,11 +37,24 @@ interface ApiInterface {
         @Query("ATPT_OFCDC_SC_CODE") scCode: String,
         @Query("SD_SCHUL_CODE") schoolCode : String,
     ) : Call<SchoolDepartmentData>
+
+    @GET("mealServiceDietInfo")
+    fun getSchoolLunch(
+        @Query("KEY") key: String,
+        @Query("Type") type : String,
+        @Query("pIndex") pIndex : Int,
+        @Query("pSize") pSize : Int,
+        @Query("ATPT_OFCDC_SC_CODE") scCode: String,
+        @Query("SD_SCHUL_CODE") schoolCode : String,
+        @Query("MLSV_YMD") days:String
+    ) : Call<SchoolMealData>
+
 //    @GET("schoolInfo")
 //    fun getSchoolInfo(
 //        @Query("KEY") key: String,
 //        @Query("Type") type : String,
 //        @Query("pIndex") pIndex : Int,
 //        @Query("pSize") pSize : Int,
-//    ) 기본 틀
+//    ) : Call<>
+//    기본 틀
 }
