@@ -14,7 +14,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SchoolInfoDialog(private val context : Context,private var schoolName : String) {
+class SchoolInfoDialog(private val context : Context,private var schoolName : String,private var schoolOfficeCode: String) {
     private val dialog = Dialog(context)
     private val TAG = "SchoolInfoDialog"
     private lateinit var schoolInfo : RecyclerView
@@ -59,7 +59,7 @@ class SchoolInfoDialog(private val context : Context,private var schoolName : St
             "JSON",
             1,
             40,
-            context.resources.getString(R.string.area_code),
+            schoolOfficeCode,
             schoolName
         )
         call?.enqueue(object : Callback<schoolInfoData> {

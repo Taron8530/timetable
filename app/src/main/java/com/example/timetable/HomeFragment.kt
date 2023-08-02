@@ -26,6 +26,7 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
     val schoolCode = schoolInfo.schoolCode
     val line = schoolInfo.line
     val department = schoolInfo.department
+    val schoolOfficeCode = schoolInfo.schoolOfficeCode
     val grade = schoolInfo.grade
     val classNum = schoolInfo.classNum
     val TAG = "HomeFragment"
@@ -65,7 +66,7 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
             "json",
             1,
             5,
-            resources.getString(R.string.area_code),
+            schoolOfficeCode,
             schoolCode,
             testGetDate(),
         )
@@ -118,9 +119,8 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
             "json",
             1,
             100,
-            resources.getString(R.string.area_code),
+            schoolOfficeCode,
             schoolCode,
-            testGetDate(),
             testGetDate(),
             grade,
             classNum
@@ -156,7 +156,7 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
         return date
     }
     fun testGetDate() : String{
-        return "20230313"
+        return "20230315"
     }
     fun testGetShowDate():String{
         return "03월 13일(월)"

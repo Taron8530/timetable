@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var grade : String
     lateinit var classNum : String
     lateinit var line : String
+    lateinit var schoolOfficeCode: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     }
     fun init(){
         getSharedPreference()
-        var schoolInfo = SchoolInfo(schoolCode, line,department, grade, classNum)
+        var schoolInfo = SchoolInfo(schoolOfficeCode,schoolCode, line,department, grade, classNum)
         homeFragment = HomeFragment(schoolInfo)
         timeTableFragment = TimeTableFragment()
         profileFragment = ProfileFragment(schoolInfo)
@@ -70,6 +71,7 @@ class MainActivity : AppCompatActivity() {
         grade = getSharedPreferenceKey("grade")
         classNum = getSharedPreferenceKey("classNumber")
         line = getSharedPreferenceKey("line")
+        schoolOfficeCode = getSharedPreferenceKey("schoolOfficeCode")
     }
     fun getSharedPreferenceKey(key:String) : String{
         var sharedPreferences = getSharedPreferences("Userinfo",0)

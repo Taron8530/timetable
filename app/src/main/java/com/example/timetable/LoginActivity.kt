@@ -29,13 +29,16 @@ class LoginActivity : AppCompatActivity() {
     lateinit var searchSchoolName: TextView
     lateinit var schoolGradeAdapter: ArrayAdapter<String>
     lateinit var schoolClassAdapter: ArrayAdapter<String>
+    lateinit var schoolOfficeAdapter : ArrayAdapter<String>
 
     lateinit var schoolGradeSpinner: Spinner
     lateinit var schoolClassSpinner: Spinner
     lateinit var schoolDepartmentSpinner : Spinner
+    lateinit var schoolOfficeSpinner : Spinner
 
     lateinit var schoolGrade: Array<String>
     lateinit var schoolClassNumber: Array<String>
+    val schoolOfficeCodeArray= hashMapOf("서울특별시 교육청" to "B10", "경기도 교육청" to "J10", "부산광역시 교육청" to "C10", "대구광역시 교육청" to "D10","인천광역시 교육청" to "E10","광주광역시 교육청" to "F10","대전광역시 교육청" to "G10","울산광역시 교육청" to "H10","세종특별자치시 교육청" to "E10","강원특별자치도교육청" to "K10","충청북도 교육청" to "M10","충청남도 교육청" to "N10","전라북도 교육청" to "P10","전라남도 교육청" to "Q10","경상북도 교육청" to "R10","경상남도 교육청" to "S10","제주특별자치도교육청" to "T10")
 
     lateinit var selectSchoolInfo: schoolInfoData.SchoolInfo.Row
     lateinit var schoolDepartment: ArrayList<String>
@@ -43,10 +46,12 @@ class LoginActivity : AppCompatActivity() {
 
     lateinit var classNumber: String
     lateinit var gradeNumber: String
+    lateinit var schoolOfficeCode : String
     var department: String = ""
     var schoolCheck = false
     var gradeCheck = false
     var classCheck = false
+    var schoolOfficeCodeCheck = false
     var departmentCheck = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,12 +66,44 @@ class LoginActivity : AppCompatActivity() {
 
         onItemSelectSpinner()
 
+        Log.d(TAG, "onCreate: ")
+
+
+    }
+
+    fun initView() {
+        schoolName = findViewById<EditText>(R.id.school_name)
+        searchSchoolName = findViewById<TextView>(R.id.search_button)
+
+        schoolGradeSpinner = findViewById(R.id.school_Grade)
+        schoolClassSpinner = findViewById(R.id.school_Class_Number)
+        schoolDepartmentSpinner = findViewById<Spinner>(R.id.school_department)
+        schoolOfficeSpinner = findViewById(R.id.school_office_code)
+
+        schoolGrade = resources.getStringArray(R.array.gradeList)
+        schoolClassNumber = resources.getStringArray(R.array.classNum)
+        schoolDepartment = ArrayList()
+
+        schoolGradeAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, schoolGrade)
+        schoolClassAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, schoolClassNumber)
+        schoolOfficeAdapter = ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, getSchoolOfficeName())
+
+        schoolGradeSpinner.adapter = schoolGradeAdapter
+        schoolClassSpinner.adapter = schoolClassAdapter
+        schoolOfficeSpinner.adapter = schoolOfficeAdapter
+        signInButton = findViewById(R.id.login_SignIn)
+    }
+
+
+    fun initOnClickListener() {
         searchSchoolName.setOnClickListener(View.OnClickListener() {
             Log.d(TAG, "onCreate:  버튼 눌 ")
-            if (schoolName.length() == 0) {
+            if(!schoolOfficeCodeCheck){
+                Toast.makeText(this, "교육청을 먼저 선택해야 합니다!", Toast.LENGTH_SHORT).show()
+            } else if (schoolName.length() == 0) {
                 Toast.makeText(this, "학교 이름을 입력 해주세요.", Toast.LENGTH_SHORT).show()
             } else {
-                var dialog = SchoolInfoDialog(this, schoolName.text.toString())
+                var dialog = SchoolInfoDialog(this, schoolName.text.toString(),schoolOfficeCode)
                 dialog.showDialog()
                 dialog.setOnClickListener(object : SchoolInfoDialog.OnDialogClickListener {
                     override fun onClicked(schoolInfo: schoolInfoData.SchoolInfo.Row) {
@@ -87,7 +124,7 @@ class LoginActivity : AppCompatActivity() {
                                 "json",
                                 1,
                                 30,
-                                resources.getString(R.string.area_code),
+                                schoolOfficeCode,
                                 schoolInfo.SD_SCHUL_CODE
                             )
                             call.enqueue(object : Callback<SchoolDepartmentData> {
@@ -139,6 +176,9 @@ class LoginActivity : AppCompatActivity() {
                         schoolName.setBackgroundColor(resources.getColor(R.color.gray))
                         schoolName.setText(schoolInfo.SCHUL_NM)
                         selectSchoolInfo = schoolInfo
+
+                        schoolOfficeSpinner.setBackgroundColor(resources.getColor(R.color.gray))
+                        schoolOfficeSpinner.isClickable = false
                         Log.d(
                             TAG,
                             "onClicked: 학교이름{${schoolInfo.SCHUL_NM}} 학교 코드 : {${schoolInfo.SD_SCHUL_CODE}} 계열명 : ${schoolInfo.HS_SC_NM}"
@@ -147,32 +187,6 @@ class LoginActivity : AppCompatActivity() {
                 })
             }
         })
-        Log.d(TAG, "onCreate: ")
-
-
-    }
-
-    fun initView() {
-        schoolName = findViewById<EditText>(R.id.school_name)
-        searchSchoolName = findViewById<TextView>(R.id.search_button)
-
-        schoolGradeSpinner = findViewById(R.id.school_Grade)
-        schoolClassSpinner = findViewById(R.id.school_Class_Number)
-        schoolDepartmentSpinner = findViewById<Spinner>(R.id.school_department)
-
-        schoolGrade = resources.getStringArray(R.array.gradeList)
-        schoolClassNumber = resources.getStringArray(R.array.classNum)
-        schoolDepartment = ArrayList()
-
-        schoolGradeAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, schoolGrade)
-        schoolClassAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, schoolClassNumber)
-
-        schoolGradeSpinner.adapter = schoolGradeAdapter
-        schoolClassSpinner.adapter = schoolClassAdapter
-        signInButton = findViewById(R.id.login_SignIn)
-    }
-
-    fun initOnClickListener() {
         schoolName.setOnClickListener(View.OnClickListener {
             schoolName.text.clear()
             schoolCheck = false
@@ -180,6 +194,10 @@ class LoginActivity : AppCompatActivity() {
             searchSchoolName.setBackgroundColor(getColor(R.color.white))
             schoolName.setBackgroundColor(resources.getColor(R.color.white))
             schoolDepartmentSpinner.visibility = View.GONE
+
+            schoolOfficeSpinner.setBackgroundColor(resources.getColor(R.color.white))
+            schoolOfficeSpinner.isClickable = true
+            schoolOfficeCodeCheck = false
         })
         signInButton.setOnClickListener(View.OnClickListener {
             val checked = classCheck && gradeCheck && schoolCheck && departmentCheck
@@ -193,6 +211,7 @@ class LoginActivity : AppCompatActivity() {
                 editor.putString("classNumber", classNumber)
                 editor.putString("department", department)
                 editor.putString("schoolName", selectSchoolInfo.SCHUL_NM)
+                editor.putString("schoolOfficeCode",schoolOfficeCode)
                 editor.putString("line", selectSchoolInfo.HS_SC_NM)
                 if (editor.commit()) {
                     var intent = Intent(applicationContext, MainActivity::class.java)
@@ -220,6 +239,26 @@ class LoginActivity : AppCompatActivity() {
 
 
     fun onItemSelectSpinner() {
+        schoolOfficeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                schoolOfficeCode = schoolOfficeSpinner.getItemAtPosition(position).toString()
+                Log.d(TAG, "onItemSelected0: ${schoolOfficeCode} check :${schoolOfficeCodeCheck}")
+                schoolOfficeCodeCheck = !schoolOfficeCode.equals("교육청 선택")
+                if(schoolOfficeCodeCheck){
+                    schoolOfficeCode = schoolOfficeCodeArray[schoolOfficeCode].toString()
+                }
+                Log.d(TAG, "onItemSelected1: ${schoolOfficeCode} check :${schoolOfficeCodeCheck}")
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+        }
         schoolClassSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -263,10 +302,23 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+    fun getSchoolOfficeName() : ArrayList<String>{
+        var array : ArrayList<String> = ArrayList()
+        array.add("교육청 선택")
+        for(i in schoolOfficeCodeArray.keys) {
+            array.add(i)
+        }
+        return array
+    }
+
+
     fun checkLogin(){
         var sharedPreferences = getSharedPreferences("Userinfo",0)
         var schoolCode = sharedPreferences.getString("schoolCode","")
         if(!schoolCode.equals("")){
+            for (i in schoolOfficeCodeArray.keys) {
+                Log.d(TAG, "checkLogin: 전체 : ${i}")
+            }
             var intent = Intent(applicationContext,MainActivity ::class.java)
             startActivity(intent)
         }

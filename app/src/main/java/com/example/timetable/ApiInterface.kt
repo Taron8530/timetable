@@ -23,8 +23,7 @@ interface ApiInterface {
         @Query("pSize") pSize: Int,
         @Query("ATPT_OFCDC_SC_CODE") scCode: String,
         @Query("SD_SCHUL_CODE") schoolCode:String,
-        @Query("TI_FROM_YMD") startDate:String,
-        @Query("TI_TO_YMD") endDate:String,
+        @Query("ALL_TI_YMD") startDate:String,
         @Query("GRADE") grade:String,
         @Query("CLASS_NM") classNum:String
     ) : Call<HisTimeTableData.HisTimetable>
