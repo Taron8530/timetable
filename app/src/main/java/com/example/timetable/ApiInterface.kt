@@ -26,7 +26,20 @@ interface ApiInterface {
         @Query("ALL_TI_YMD") startDate:String,
         @Query("GRADE") grade:String,
         @Query("CLASS_NM") classNum:String
-    ) : Call<HisTimeTableData.HisTimetable>
+    ) : Call<HisTimeTableData>
+    @GET("hisTimetable")
+    fun getSpecializedTimetable(
+        @Query("KEY") key : String,
+        @Query("Type") type : String,
+        @Query("pIndex") pIndex : Int,
+        @Query("pSize") pSize: Int,
+        @Query("ATPT_OFCDC_SC_CODE") scCode: String,
+        @Query("SD_SCHUL_CODE") schoolCode:String,
+        @Query("ALL_TI_YMD") startDate:String,
+        @Query("GRADE") grade:String,
+        @Query("CLASS_NM") classNum:String,
+        @Query("DDDEP_NM") departmentName : String
+    ) : Call<HisTimeTableData>
     @GET("schoolMajorinfo")
     fun getSchoolDepartmentInfo(
         @Query("KEY") key: String,

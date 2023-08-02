@@ -95,7 +95,7 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
     }
     fun removeParentheses(input: String): String {
         var result = input
-        val regex = "\\([^)]+\\)".toRegex() // 정규식 패턴: 괄호와 괄호 안의 내용을 찾음
+        val regex = "\\([^*)]+\\)".toRegex() // 정규식 패턴: 괄호와 괄호 안의 내용을 찾음
 
         // 정규식에 해당하는 부분을 공백으로 대체하여 제거
         result = result.replace(regex, "")
@@ -114,7 +114,7 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
         val testshow = "${testGetShowDate()} 오늘의 시간표"
         showTextView.setText(testshow)
         var apiInterface = ApiClient.getRetrofit().create(ApiInterface ::class.java)
-        var call = apiInterface.getGeneralTimetable(
+        var call = apiInterface.getSpecializedTimetable(
             resources.getString(R.string.education_api_key),
             "json",
             1,
@@ -123,30 +123,51 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
             schoolCode,
             testGetDate(),
             grade,
-            classNum
+            classNum,
+            department
         )
+        if(department.equals("")){
+            call = apiInterface.getGeneralTimetable(
+                resources.getString(R.string.education_api_key),
+                "json",
+                1,
+                100,
+                schoolOfficeCode,
+                schoolCode,
+                testGetDate(),
+                grade,
+                classNum
+            )
+        }
 //        var timetable : Array<HisTimeTableData.HisTimetable.Row>
-        var timetable = listOf<String>("1교시 : 국어","2교시 : 영어","3교시 : 수학","4교시 : 사회","5교시 : 과학","6교시 : 한국사","7교시 : 창체",)
-        call.enqueue(object : Callback<HisTimeTableData.HisTimetable>{
+        var timetable = ArrayList<TimeTableData>()
+        val recyclerView: RecyclerView = root.findViewById(R.id.recyclerView)
+        Log.d(TAG, "getTimeTable: ${timetable}")
+        val adapter = TimeTableAdapter(timetable)
+        recyclerView.layoutManager = GridLayoutManager(activity?.applicationContext, 1)
+        recyclerView.adapter = adapter
+        call.enqueue(object : Callback<HisTimeTableData>{
             override fun onResponse(
-                call: Call<HisTimeTableData.HisTimetable>,
-                response: Response<HisTimeTableData.HisTimetable>
+                call: Call<HisTimeTableData>,
+                response: Response<HisTimeTableData>
             ) {
                 if(response.isSuccessful){
-//                    Log.d(TAG, "시간표: ${response.body()?.row?.get(1)?.DDDEP_NM}")
-                    Log.d(TAG, "시간표: ${response}")
+                    Log.d(TAG, "시간표: ${response.body()?.hisTimetable?.get(1)?.row}")
+                    var array = response.body()?.hisTimetable?.get(1)?.row
+                        for(value in array!!){
+                            Log.d(TAG, "onResponse for loop: ${value.PERIO} 교시 : ${value.ITRT_CNTNT}")
+                            timetable.add(TimeTableData(value.PERIO,value.ITRT_CNTNT.replace("*","")))
+                            Log.d(TAG, "onResponse for loop 1: ${timetable}")
+                        }
+                    adapter.notifyDataSetChanged()
                 }
             }
 
-            override fun onFailure(call: Call<HisTimeTableData.HisTimetable>, t: Throwable) {
+            override fun onFailure(call: Call<HisTimeTableData>, t: Throwable) {
                 Log.d(TAG, "onFailure: ${t}")
             }
 
         })
-        val recyclerView: RecyclerView = root.findViewById(R.id.recyclerView)
-        val adapter = TimeTableAdapter(timetable)
-        recyclerView.layoutManager = GridLayoutManager(activity?.applicationContext, 1)
-        recyclerView.adapter = adapter
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun getDate() : String{
@@ -156,7 +177,7 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
         return date
     }
     fun testGetDate() : String{
-        return "20230315"
+        return "20230313"
     }
     fun testGetShowDate():String{
         return "03월 13일(월)"

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">timetable</string>
+    <string name="app_name">먹스케줄</string>
     <string name="education_api_key">dfd9febbc7fb40d394bab8ff4cce0943</string>
     <string name="area_code">J10</string>
     <!-- TODO: Remove or change this placeholder text -->
