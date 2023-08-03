@@ -186,10 +186,10 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
         return date
     }
     fun testGetDate() : String{
-        return "20230314"
+        return "20230316"
     }
     fun testGetShowDate():String{
-        return "03월 14일(화)"
+        return "03월 16일(목)"
     }
 }
 

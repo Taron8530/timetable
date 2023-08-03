@@ -15,7 +15,7 @@
         android:layout_marginTop="50dp"
         android:background="@drawable/main_meal_banner"
         android:orientation="horizontal"
-        android:padding="10dp"
+        android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -75,6 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginRight="10dp"
+        android:fontFamily="@font/topbar_font"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
