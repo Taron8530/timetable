@@ -11,6 +11,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var homeFragment : HomeFragment
     lateinit var timeTableFragment : TimeTableFragment
     lateinit var profileFragment : ProfileFragment
+    lateinit var mealFragment: MealFragment
     lateinit var schoolCode : String
     lateinit var department : String
     lateinit var grade : String
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         homeFragment = HomeFragment(schoolInfo)
         timeTableFragment = TimeTableFragment()
         profileFragment = ProfileFragment(schoolInfo)
+        mealFragment = MealFragment(schoolInfo)
 
         var bnv_main = findViewById(R.id.mainBottomNavigationView) as BottomNavigationView
         bnv_main.run { setOnNavigationItemSelectedListener {
@@ -41,8 +43,7 @@ class MainActivity : AppCompatActivity() {
                     supportFragmentManager.beginTransaction().replace(R.id.fl_container, timeTableFragment).commit()
                 }
                 R.id.lunch -> {
-//                    val settingFragment = SettingFragment()
-//                    supportFragmentManager.beginTransaction().replace(R.id.fl_container, settingFragment).commit()
+                    supportFragmentManager.beginTransaction().replace(R.id.fl_container, mealFragment).commit()
                 }
                 R.id.account -> {
                     supportFragmentManager.beginTransaction().replace(R.id.fl_container, profileFragment).commit()

@@ -49,6 +49,8 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
     }
     fun initView(){
         todayLunch = root.findViewById(R.id.todayLunch)
+        val showDate : TextView = root.findViewById(R.id.homeTodayDate)
+        showDate.setText(testGetShowDate())
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun getLunch(){
@@ -56,9 +58,6 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
         val week = week.get(getCurrentWeek()-1)
 //        val fotmat = DateTimeFormatter.ofPattern("MM월 dd일(${week}) 오늘의 급식")
 //        val showDate = LocalDateTime.now().format(fotmat)
-        val todayTextView = root.findViewById<TextView>(R.id.lunch_show_date)
-        val test = "${testGetShowDate()} 오늘의 급식"
-        todayTextView.setText(test)
         val date = getDate()
         var apiInterface = ApiClient.getRetrofit().create(ApiInterface :: class.java)
         var call = apiInterface.getSchoolLunch(
@@ -110,9 +109,6 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun getTimeTable(){
-        val showTextView : TextView = root.findViewById(R.id.time_table_showDate)
-        val testshow = "${testGetShowDate()} 오늘의 시간표"
-        showTextView.setText(testshow)
         var apiInterface = ApiClient.getRetrofit().create(ApiInterface ::class.java)
         var call = apiInterface.getSpecializedTimetable(
             resources.getString(R.string.education_api_key),
@@ -153,13 +149,26 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
             ) {
                 if(response.isSuccessful){
                     Log.d(TAG, "시간표: ${response.body()?.hisTimetable?.get(1)?.row}")
+                    Log.d(TAG, "시간표: ${response}")
                     var array = response.body()?.hisTimetable?.get(1)?.row
-                        for(value in array!!){
-                            Log.d(TAG, "onResponse for loop: ${value.PERIO} 교시 : ${value.ITRT_CNTNT}")
-                            timetable.add(TimeTableData(value.PERIO,value.ITRT_CNTNT.replace("*","")))
+                    if(array != null) {
+                        for (value in array!!) {
+                            Log.d(
+                                TAG,
+                                "onResponse for loop: ${value.PERIO} 교시 : ${value.ITRT_CNTNT}"
+                            )
+                            timetable.add(
+                                TimeTableData(
+                                    value.PERIO,
+                                    value.ITRT_CNTNT.replace("*", "")
+                                )
+                            )
                             Log.d(TAG, "onResponse for loop 1: ${timetable}")
                         }
-                    adapter.notifyDataSetChanged()
+                        adapter.notifyDataSetChanged()
+                    }else {
+
+                    }
                 }
             }
 
@@ -177,10 +186,10 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
         return date
     }
     fun testGetDate() : String{
-        return "20230313"
+        return "20230314"
     }
     fun testGetShowDate():String{
-        return "03월 13일(월)"
+        return "03월 14일(화)"
     }
 }
 
