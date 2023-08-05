@@ -15,7 +15,6 @@ class SchoolInfoAdapter (private val context: Context, private var datas: List<s
         onClickListener = listener
     }
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        private val itemView = view
         private val schoolName = view.findViewById<TextView>(R.id.school_name_item)
         private val schoolLocation = view.findViewById<TextView>(R.id.school_location_item)
         fun bind(items : schoolInfoData.SchoolInfo.Row){
