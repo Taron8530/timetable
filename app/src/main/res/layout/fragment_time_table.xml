@@ -1,6 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TimeTableFragment"/>
+    android:orientation="vertical">
+
+    <!-- 교시별 시간표 레이아웃 -->
+    <TableLayout
+        android:id="@+id/tablelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*"
+        android:padding="10dp"> <!-- 테두리와 셀 사이의 간격을 설정 -->
+
+        <!-- 시간표 제목 행 -->
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="시간"
+                android:layout_margin="3dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="월"
+                android:layout_margin="3dp"
+                android:gravity="center"
+                android:background="@drawable/cell_background" />
+
+            <!-- 화, 수, 목, 금 교시 추가 -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="화"
+                android:layout_margin="3dp"
+                android:gravity="center"
+                android:background="@drawable/cell_background" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="수"
+                android:layout_margin="3dp"
+                android:gravity="center"
+                android:background="@drawable/cell_background" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="목"
+                android:layout_margin="3dp"
+                android:gravity="center"
+                android:background="@drawable/cell_background" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="금"
+                android:layout_margin="3dp"
+                android:gravity="center"
+                android:background="@drawable/cell_background" />
+        </TableRow>
+
+        <!-- 1교시부터 7교시까지 시간표 데이터 행 추가 -->
+        <TableRow>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="1교시"
+                android:layout_margin="3dp"
+                android:gravity="center"
+                android:background="@drawable/cell_background" />
+
+            <!-- 각 교시별 내용 추가 -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="과목 내용"
+                android:padding="5dp"
+                android:layout_margin="3dp"
+                android:gravity="center"
+                android:background="@drawable/cell_background" />
+
+            <!-- 화, 수, 목, 금 교시 내용 추가 -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="과목 내용"
+                android:padding="5dp"
+                android:layout_margin="3dp"
+                android:gravity="center"
+                android:background="@drawable/cell_background" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="과목 내용"
+                android:padding="5dp"
+                android:layout_margin="3dp"
+                android:gravity="center"
+                android:background="@drawable/cell_background" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="과목 내용"
+                android:padding="5dp"
+                android:layout_margin="3dp"
+                android:gravity="center"
+                android:background="@drawable/cell_background" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="과목 내용"
+                android:padding="5dp"
+                android:layout_margin="3dp"
+                android:gravity="center"
+                android:background="@drawable/cell_background" />
+        </TableRow>
+
+        <!-- 나머지 교시 행도 위와 동일하게 추가 -->
+
+    </TableLayout>
+</LinearLayout>

@@ -107,6 +107,7 @@ class LoginActivity : AppCompatActivity() {
                 dialog.showDialog()
                 dialog.setOnClickListener(object : SchoolInfoDialog.OnDialogClickListener {
                     override fun onClicked(schoolInfo: schoolInfoData.SchoolInfo.Row) {
+                        Log.d(TAG, "onClicked: 학교 계역 ${schoolInfo.HS_SC_NM}")
                         if (schoolInfo.HS_SC_NM.trim().equals("")) {
                             Toast.makeText(
                                 applicationContext,
@@ -116,7 +117,7 @@ class LoginActivity : AppCompatActivity() {
                             schoolName.text.clear()
                             return
                         }
-                        if (!schoolInfo.HS_SC_NM.equals("일반고")) {
+                        if (!schoolInfo.HS_SC_NM.equals("일반고") && !schoolInfo.HS_SC_NM.equals("자율고")) {
                             var apiInterface =
                                 ApiClient.getRetrofit().create(ApiInterface::class.java)
                             var call = apiInterface.getSchoolDepartmentInfo(

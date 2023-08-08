@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         getSharedPreference()
         var schoolInfo = SchoolInfo(schoolOfficeCode,schoolCode, line,department, grade, classNum)
         homeFragment = HomeFragment(schoolInfo)
-        timeTableFragment = TimeTableFragment()
+        timeTableFragment = TimeTableFragment(schoolInfo)
         profileFragment = ProfileFragment(schoolInfo)
         mealFragment = MealFragment(schoolInfo)
 

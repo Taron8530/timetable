@@ -40,6 +40,33 @@ interface ApiInterface {
         @Query("CLASS_NM") classNum:String,
         @Query("DDDEP_NM") departmentName : String
     ) : Call<HisTimeTableData>
+    @GET("hisTimetable")
+    fun getGeneralWeekTimetable(
+        @Query("KEY") key : String,
+        @Query("Type") type : String,
+        @Query("pIndex") pIndex : Int,
+        @Query("pSize") pSize: Int,
+        @Query("ATPT_OFCDC_SC_CODE") scCode: String,
+        @Query("SD_SCHUL_CODE") schoolCode:String,
+        @Query("TI_FROM_YMD") startDate:String,
+        @Query("TI_TO_YMD") endDate:String,
+        @Query("GRADE") grade:String,
+        @Query("CLASS_NM") classNum:String
+    ) : Call<HisTimeTableData>
+    @GET("hisTimetable")
+    fun getSpecializedWeekTimetable(
+        @Query("KEY") key : String,
+        @Query("Type") type : String,
+        @Query("pIndex") pIndex : Int,
+        @Query("pSize") pSize: Int,
+        @Query("ATPT_OFCDC_SC_CODE") scCode: String,
+        @Query("SD_SCHUL_CODE") schoolCode:String,
+        @Query("TI_FROM_YMD") startDate:String,
+        @Query("TI_TO_YMD") endDate:String,
+        @Query("GRADE") grade:String,
+        @Query("CLASS_NM") classNum:String,
+        @Query("DDDEP_NM") departmentName : String
+    ) : Call<HisTimeTableData>
     @GET("schoolMajorinfo")
     fun getSchoolDepartmentInfo(
         @Query("KEY") key: String,

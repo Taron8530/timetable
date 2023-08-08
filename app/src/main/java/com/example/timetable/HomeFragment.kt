@@ -158,7 +158,7 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
                     Log.d(TAG, "시간표: ${response}")
                     var array = response.body()?.hisTimetable?.get(1)?.row
                     if(array != null) {
-                        for (value in array!!) {
+                        for (value in array) {
                             Log.d(
                                 TAG,
                                 "onResponse for loop: ${value.PERIO} 교시 : ${value.ITRT_CNTNT}"
