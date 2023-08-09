@@ -3,5 +3,5 @@
     <dimen name="row_spacing">10dp</dimen> <!-- 간격 조절을 원하는 만큼 설정 -->
     <dimen name="column_spacing">10dp</dimen>
     <dimen name="start_padding">10dp</dimen>
-    <dimen name="cell_margin">3dp</dimen>
+    <dimen name="cell_margin">5dp</dimen>
 </resources>

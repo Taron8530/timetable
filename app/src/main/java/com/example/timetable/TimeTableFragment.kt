@@ -29,6 +29,7 @@ import java.util.Locale
 
 class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
     lateinit var root : View
+    lateinit var tableLayout: TableLayout
     val schoolCode = schoolInfo.schoolCode
     val line = schoolInfo.line
     val department = schoolInfo.department
@@ -36,6 +37,8 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
     val grade = schoolInfo.grade
     val classNum = schoolInfo.classNum
     val TAG = "TimeTableFragment"
+    val layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,7 +51,11 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        init()
         getTimeTable()
+    }
+    fun init(){
+        tableLayout = root.findViewById(R.id.tablelayout)
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun getTimeTable(){
@@ -93,11 +100,34 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
                     val timetableData = response.body()
                     if (timetableData != null) {
                         val parsedData = parseTimetableData(timetableData)
+                        val margin = resources.getDimensionPixelSize(R.dimen.cell_margin)
                         for ((period, subjects) in parsedData) {
-                                Log.d(TAG, "onResponse: Period: $period")
-                                for (subject in subjects) {
-                                    Log.d(TAG, "onResponse:  Subject: $subject")
+                            val row = TableRow(context)
+
+                            row.layoutParams = TableLayout.LayoutParams(
+                                TableLayout.LayoutParams.MATCH_PARENT,
+                                TableLayout.LayoutParams.WRAP_CONTENT
+                            )
+                            Log.d(TAG, "onResponse: Period: $period 교시")
+                            val periodTextView = createTextView()
+                            periodTextView.layoutParams = layoutParams
+                            periodTextView.text = "${period}교시"
+                            periodTextView.gravity = Gravity.CENTER
+                            periodTextView.setBackgroundResource(R.drawable.cell_background)
+                            periodTextView.setPadding(margin, margin, margin, margin)
+                            row.addView(periodTextView)
+                            for (subject in 0..4) {
+                                val subjectTextView = createTextView()
+                                subjectTextView.layoutParams = layoutParams
+                                // Set your subject content here
+                                subjectTextView.text = subjects.get(subject)
+                                subjectTextView.gravity = Gravity.CENTER
+                                subjectTextView.setBackgroundResource(R.drawable.cell_background)
+                                subjectTextView.setPadding(margin, margin, margin, margin)
+                                row.addView(subjectTextView)
+                                Log.d(TAG, "onResponse:  Subject: $subject")
                             }
+                            tableLayout.addView(row)
                         }
                     }
                 }
@@ -128,7 +158,7 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
         return Pair(getFormattedDate(start), getFormattedDate(end))
     }
     fun testGetWeek() : Pair<String,String>{
-        return Pair("202303013","20230317")
+        return Pair("20230313","20230317")
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun getFormattedDate(date: LocalDate): String {
@@ -140,11 +170,16 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
         val resultMap = mutableMapOf<String, MutableList<String>>()
 
         val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+        val periods = mutableSetOf<String>()
+
         for (row in timetableData.hisTimetable[1].row) {
             val dateStr = row.ALL_TI_YMD
             val date = LocalDate.parse(dateStr, dateFormatter)
             val period = row.PERIO
             val subject = row.ITRT_CNTNT
+            Log.d(TAG, "parseTimetableData: ${dateStr} ,$date , $period , $subject}")
+
+            periods.add(period)
 
             if (!resultMap.containsKey(period)) {
                 resultMap[period] = mutableListOf()
@@ -152,7 +187,23 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
             resultMap[period]?.add(subject)
         }
 
+        // Add empty subjects for missing periods
+        for (period in periods) {
+            if (resultMap[period]?.size ?: 0 < 6) {
+                val emptySubjectCount = 6 - (resultMap[period]?.size ?: 0)
+                for (i in 1..emptySubjectCount) {
+                    resultMap[period]?.add("")
+                }
+            }
+        }
+
         return resultMap
+    }
+
+    fun createTextView() : TextView{
+        var column :TextView = TextView(context)
+
+        return column
     }
 
 }
