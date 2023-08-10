@@ -53,7 +53,7 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun getTimeTable(){
-        val (start, end) = testGetWeek()
+        val (start, end) = getStartAndEndOfThisWeek()
         weekDate.setText("$start ~ $end")
 
         Log.d(TAG, "getTimeTable: ${start} , end ${end}")
@@ -139,15 +139,12 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
     fun getStartAndEndOfThisWeek(): Pair<String, String> {
         val today = LocalDate.now()
 
-        // 오늘이 일주일의 몇번째 인지 월요일=1, 화요일=2, 수요일=3.....
         val day = today.dayOfWeek.value
         var adjustedDay = day
         if (adjustedDay == 7) {
             adjustedDay = 0
         }
 
-        // "오늘 날짜"에서 "오늘이 일주일의 몇번째"를 빼면 요번주의 시작일이 나온다.
-        // 예를 들어 "2022.9.8 목요일" 이라면 "목요일=4" [9.8 - 4일 = 9월4일 일요일]
         val start = today.minusDays(adjustedDay.toLong()).plusDays(1)
         val end = start.plusDays(4)
 

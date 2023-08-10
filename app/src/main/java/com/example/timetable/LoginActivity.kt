@@ -108,7 +108,7 @@ class LoginActivity : AppCompatActivity() {
                 dialog.setOnClickListener(object : SchoolInfoDialog.OnDialogClickListener {
                     override fun onClicked(schoolInfo: schoolInfoData.SchoolInfo.Row) {
                         Log.d(TAG, "onClicked: 학교 계역 ${schoolInfo.HS_SC_NM}")
-                        if (schoolInfo.HS_SC_NM.trim().equals("")) {
+                        if (schoolInfo?.HS_SC_NM?.trim().equals("")) {
                             Toast.makeText(
                                 applicationContext,
                                 "현재 고등학교만 지원하고 있습니다.",
@@ -322,6 +322,7 @@ class LoginActivity : AppCompatActivity() {
             }
             var intent = Intent(applicationContext,MainActivity ::class.java)
             startActivity(intent)
+            finish()
         }
     }
 }

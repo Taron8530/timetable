@@ -52,7 +52,7 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
         todayLunch = root.findViewById(R.id.todayLunch)
         val showDate : TextView = root.findViewById(R.id.homeTodayDate)
 //        showDate.setText(getShowDate())
-        showDate.setText(testGetShowDate())
+        showDate.setText(getShowDate())
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun getLunch(){
@@ -69,7 +69,7 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
             5,
             schoolOfficeCode,
             schoolCode,
-            testGetDate(),
+            date,
         )
         call.enqueue(object : Callback<SchoolMealData>{
             override fun onResponse(
@@ -80,6 +80,7 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
                     var test = ""
                     var lunch = root.findViewById<TextView>(R.id.todayLunch)
                     Log.d(TAG, "onResponse: 급식 테스트${response?.body()?.mealServiceDietInfo?.get(0)?.head?.get(0)?.list_total_count}")
+                    Log.d(TAG, "onResponse: 급식 통신 $response")
                     test = removeParentheses(response?.body()?.mealServiceDietInfo?.get(1)?.row?.get(0)?.DDISH_NM?.replace("<br/>","\n").toString())
                     if(response?.body()?.mealServiceDietInfo?.get(0)?.head?.get(0)?.list_total_count ==3){
                         test = removeParentheses(response?.body()?.mealServiceDietInfo?.get(1)?.row?.get(1)?.DDISH_NM?.replace("<br/>","\n").toString())
@@ -124,7 +125,7 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
             100,
             schoolOfficeCode,
             schoolCode,
-            testGetDate(),
+            getDate(),
             grade,
             classNum,
             department
@@ -137,7 +138,7 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
                 100,
                 schoolOfficeCode,
                 schoolCode,
-                testGetDate(),
+                getDate(),
                 grade,
                 classNum
             )
