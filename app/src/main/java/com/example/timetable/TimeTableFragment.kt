@@ -1,31 +1,23 @@
 package com.example.timetable
 
-import android.app.ActionBar
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Space
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.core.view.setPadding
+import androidx.fragment.app.Fragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.create
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
+
 
 class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
     lateinit var root : View
@@ -38,6 +30,7 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
     val classNum = schoolInfo.classNum
     val TAG = "TimeTableFragment"
     val layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f)
+    lateinit var weekDate: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,10 +49,12 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
     }
     fun init(){
         tableLayout = root.findViewById(R.id.tablelayout)
+        weekDate = root.findViewById(R.id.time_table_week)
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun getTimeTable(){
         val (start, end) = testGetWeek()
+        weekDate.setText("$start ~ $end")
 
         Log.d(TAG, "getTimeTable: ${start} , end ${end}")
         var api : ApiInterface = ApiClient.getRetrofit().create(ApiInterface::class.java)
@@ -116,11 +111,12 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
                             periodTextView.setBackgroundResource(R.drawable.cell_background)
                             periodTextView.setPadding(margin, margin, margin, margin)
                             row.addView(periodTextView)
-                            for (subject in 0..4) {
+                            for (subject in subjects) {
                                 val subjectTextView = createTextView()
+                                subjectTextView.setTextSize(10F)
                                 subjectTextView.layoutParams = layoutParams
                                 // Set your subject content here
-                                subjectTextView.text = subjects.get(subject)
+                                subjectTextView.text = subject
                                 subjectTextView.gravity = Gravity.CENTER
                                 subjectTextView.setBackgroundResource(R.drawable.cell_background)
                                 subjectTextView.setPadding(margin, margin, margin, margin)
@@ -170,36 +166,33 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
         val resultMap = mutableMapOf<String, MutableList<String>>()
 
         val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
-        val periods = mutableSetOf<String>()
+        val weekdays = listOf("월", "화", "수", "목", "금")
+        val periods = listOf("1", "2", "3", "4", "5", "6", "7")
 
         for (row in timetableData.hisTimetable[1].row) {
             val dateStr = row.ALL_TI_YMD
             val date = LocalDate.parse(dateStr, dateFormatter)
+            val weekday = date.dayOfWeek.value % 7 -1 // 월(1)~일(7)을 월(0)~일(6)로 변환
             val period = row.PERIO
             val subject = row.ITRT_CNTNT
-            Log.d(TAG, "parseTimetableData: ${dateStr} ,$date , $period , $subject}")
-
-            periods.add(period)
 
             if (!resultMap.containsKey(period)) {
-                resultMap[period] = mutableListOf()
+                resultMap[period] = MutableList(weekdays.size) { "" }
             }
-            resultMap[period]?.add(subject)
+
+            val subjectList = resultMap[period]!!
+            subjectList[weekday] = subject
         }
 
-        // Add empty subjects for missing periods
-        for (period in periods) {
-            if (resultMap[period]?.size ?: 0 < 6) {
-                val emptySubjectCount = 6 - (resultMap[period]?.size ?: 0)
-                for (i in 1..emptySubjectCount) {
-                    resultMap[period]?.add("")
-                }
+        // Remove empty periods
+        resultMap.keys.toList().forEach { period ->
+            if (resultMap[period]!!.all { it.isBlank() }) {
+                resultMap.remove(period)
             }
         }
 
         return resultMap
     }
-
     fun createTextView() : TextView{
         var column :TextView = TextView(context)
 

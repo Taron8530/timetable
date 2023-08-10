@@ -6,6 +6,15 @@
     android:orientation="vertical">
 
     <!-- 교시별 시간표 레이아웃 -->
+    <TextView
+        android:id="@+id/time_table_week"
+        android:textSize="15dp"
+        android:gravity="right"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
     <TableLayout
         android:id="@+id/tablelayout"
         android:layout_width="match_parent"

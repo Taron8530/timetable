@@ -51,7 +51,8 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
     fun initView(){
         todayLunch = root.findViewById(R.id.todayLunch)
         val showDate : TextView = root.findViewById(R.id.homeTodayDate)
-        showDate.setText(getShowDate())
+//        showDate.setText(getShowDate())
+        showDate.setText(testGetShowDate())
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun getLunch(){
