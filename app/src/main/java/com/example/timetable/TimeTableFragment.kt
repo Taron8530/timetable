@@ -105,21 +105,12 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
                             )
                             Log.d(TAG, "onResponse: Period: $period 교시")
                             val periodTextView = createTextView()
-                            periodTextView.layoutParams = layoutParams
                             periodTextView.text = "${period}교시"
-                            periodTextView.gravity = Gravity.CENTER
-                            periodTextView.setBackgroundResource(R.drawable.cell_background)
-                            periodTextView.setPadding(margin, margin, margin, margin)
                             row.addView(periodTextView)
                             for (subject in subjects) {
                                 val subjectTextView = createTextView()
-                                subjectTextView.setTextSize(10F)
-                                subjectTextView.layoutParams = layoutParams
-                                // Set your subject content here
+                                subjectTextView.setTextSize(12F)
                                 subjectTextView.text = subject
-                                subjectTextView.gravity = Gravity.CENTER
-                                subjectTextView.setBackgroundResource(R.drawable.cell_background)
-                                subjectTextView.setPadding(margin, margin, margin, margin)
                                 row.addView(subjectTextView)
                                 Log.d(TAG, "onResponse:  Subject: $subject")
                             }
@@ -192,7 +183,11 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
     }
     fun createTextView() : TextView{
         var column :TextView = TextView(context)
-
+        val margin = resources.getDimensionPixelSize(R.dimen.cell_margin)
+        column.layoutParams = layoutParams
+        column.gravity = Gravity.CENTER
+        column.setBackgroundResource(R.drawable.cell_background)
+        column.setPadding(margin, margin, margin, margin)
         return column
     }
 
