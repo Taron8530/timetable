@@ -16,6 +16,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 
@@ -93,7 +94,11 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
                 if(response.isSuccessful){
                     Log.d(TAG, "onResponse: 시간표 ${response}")
                     val timetableData = response.body()
-                    if (timetableData != null) {
+                    Log.d(TAG, "onResponse: ${timetableData} ")
+                    if (timetableData?.hisTimetable == null) {
+                        tableLayout.visibility = View.GONE
+
+                    }else{
                         val parsedData = parseTimetableData(timetableData)
                         val margin = resources.getDimensionPixelSize(R.dimen.cell_margin)
                         for ((period, subjects) in parsedData) {
@@ -142,7 +147,7 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
         return Pair(getFormattedDate(start), getFormattedDate(end))
     }
     fun testGetWeek() : Pair<String,String>{
-        return Pair("20230313","20230317")
+        return Pair("20230821","20230825")
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun getFormattedDate(date: LocalDate): String {
@@ -186,9 +191,21 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
         val margin = resources.getDimensionPixelSize(R.dimen.cell_margin)
         column.layoutParams = layoutParams
         column.gravity = Gravity.CENTER
+        column.textAlignment = View.TEXT_ALIGNMENT_INHERIT
         column.setBackgroundResource(R.drawable.cell_background)
         column.setPadding(margin, margin, margin, margin)
         return column
+    }
+    fun getCurrentPeriod(currentTime: LocalTime, timetable: Map<Int, LocalTime>): String {
+        for ((period, startTime) in timetable) {
+            val endTime = startTime.plusMinutes(60) // 50분 간격
+
+            if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
+                return period.toString()
+            }
+        }
+
+        return "0"// 아직 수업이 시작하지 않았음을 나타내는 값
     }
 
 }

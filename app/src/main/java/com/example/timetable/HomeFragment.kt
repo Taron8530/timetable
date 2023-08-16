@@ -15,6 +15,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
@@ -31,6 +32,15 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
     val classNum = schoolInfo.classNum
     val TAG = "HomeFragment"
     val week = listOf<String>("일","월","화","수","목","금","토")
+    val timetables = mapOf(
+        1 to LocalTime.of(8, 0),  // 1교시 시작 시간
+        2 to LocalTime.of(9, 0),  // 2교시 시작 시간
+        3 to LocalTime.of(10, 0), // 3교시 시작 시간
+        4 to LocalTime.of(11,0),
+        5 to LocalTime.of(12,0),
+        6 to LocalTime.of(13,0),
+        7 to LocalTime.of(14,0)
+    )
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,6 +63,7 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
         val showDate : TextView = root.findViewById(R.id.homeTodayDate)
 //        showDate.setText(getShowDate())
         showDate.setText(getShowDate())
+        Log.d(TAG, "initView: ${getDate()} ${getShowDate()}")
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun getLunch(){
@@ -173,6 +184,11 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
                             )
                             Log.d(TAG, "onResponse for loop 1: ${timetable}")
                         }
+                        val currentTime = getCurrentPeriod(LocalTime.now(),timetables)
+                        Log.d(TAG, "onResponse: ${currentTime}")
+                        if(currentTime.toInt() <= array.size){
+                            recyclerView.scrollToPosition(currentTime.toInt() - 1)
+                        }
                         adapter.notifyDataSetChanged()
                     }else {
 
@@ -205,6 +221,17 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
     }
     fun testGetShowDate():String{
         return "03월 13일(월)"
+    }
+    fun getCurrentPeriod(currentTime: LocalTime, timetable: Map<Int, LocalTime>): String {
+        for ((period, startTime) in timetable) {
+            val endTime = startTime.plusMinutes(60)
+
+            if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
+                return period.toString()
+            }
+        }
+
+        return "0"// 아직 수업이 시작하지 않았음을 나타내는 값
     }
 }
 
