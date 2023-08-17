@@ -12,6 +12,7 @@
     <item android:id="@+id/lunch"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_lunch_foreground"
+        android:enabled="true"
         android:title="급식" />
     <item android:id="@+id/account"
         android:enabled="true"

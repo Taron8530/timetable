@@ -20,10 +20,12 @@ import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 
-
+// 조식 코드 : 1, 중식 코드 : 2, 석식 코드 : 3
+@RequiresApi(Build.VERSION_CODES.O)
 class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
     lateinit var root : View
     lateinit var todayLunch : TextView
+    lateinit var todayLunchBanner : TextView
     val schoolCode = schoolInfo.schoolCode
     val line = schoolInfo.line
     val department = schoolInfo.department
@@ -32,15 +34,23 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
     val classNum = schoolInfo.classNum
     val TAG = "HomeFragment"
     val week = listOf<String>("일","월","화","수","목","금","토")
+
+
     val timetables = mapOf(
-        1 to LocalTime.of(8, 0),  // 1교시 시작 시간
-        2 to LocalTime.of(9, 0),  // 2교시 시작 시간
-        3 to LocalTime.of(10, 0), // 3교시 시작 시간
-        4 to LocalTime.of(11,0),
-        5 to LocalTime.of(12,0),
-        6 to LocalTime.of(13,0),
-        7 to LocalTime.of(14,0)
+        1 to LocalTime.of(9, 0),  // 1교시 시작 시간
+        2 to LocalTime.of(10, 0),  // 2교시 시작 시간
+        3 to LocalTime.of(11, 0), // 3교시 시작 시간
+        4 to LocalTime.of(12,0),
+        5 to LocalTime.of(14,0),
+        6 to LocalTime.of(15,0),
+        7 to LocalTime.of(16,0)
     )
+    val mealTimes = mapOf(
+        "1" to LocalTime.of(8, 0),  // 1교시 시작 시간
+        "2" to LocalTime.of(14, 0),
+        "3" to LocalTime.of(19, 0)// 2교시 시작 시간
+    )
+    val mealNames = listOf<String>("조식","중식","석식")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,22 +60,21 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
         return root
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
         getLunch()
         getTimeTable()
     }
-    @RequiresApi(Build.VERSION_CODES.O)
+
     fun initView(){
         todayLunch = root.findViewById(R.id.todayLunch)
         val showDate : TextView = root.findViewById(R.id.homeTodayDate)
+        todayLunchBanner = root.findViewById(R.id.lunch_show_date)
 //        showDate.setText(getShowDate())
         showDate.setText(getShowDate())
         Log.d(TAG, "initView: ${getDate()} ${getShowDate()}")
     }
-    @RequiresApi(Build.VERSION_CODES.O)
     fun getLunch(){
 //        20220302
         val week = week.get(getCurrentWeek()-1)
@@ -73,6 +82,7 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
 //        val showDate = LocalDateTime.now().format(fotmat)
         val date = getDate()
         var apiInterface = ApiClient.getRetrofit().create(ApiInterface :: class.java)
+        val mealScCode = getCurrentMealTime(LocalTime.of(17,1),mealTimes)
         var call = apiInterface.getSchoolLunch(
             resources.getString(R.string.education_api_key),
             "json",
@@ -80,8 +90,23 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
             5,
             schoolOfficeCode,
             schoolCode,
+            mealScCode,
             date,
         )
+        if(getMealSetting()){
+            call =apiInterface.getSchoolLunch(
+                resources.getString(R.string.education_api_key),
+                "json",
+                1,
+                5,
+                schoolOfficeCode,
+                schoolCode,
+                "2",
+                date)
+        }else{
+            todayLunchBanner.setText("오늘의 ${mealNames.get(mealScCode.toInt()-1)}")
+        }
+
         call.enqueue(object : Callback<SchoolMealData>{
             override fun onResponse(
                 call: Call<SchoolMealData>,
@@ -97,11 +122,11 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
                         test = removeParentheses(response?.body()?.mealServiceDietInfo?.get(1)?.row?.get(1)?.DDISH_NM?.replace("<br/>","\n").toString())
                     }
                     if(test.equals("null")){
-                        lunch.setText("결과가 없습니다.")
+                        lunch.setText("교육정보개방포털에서 비공개된 자료로 \n 급식정보가 없습니다.")
                     }else{
                         lunch.setText(test)
                     }
-                    Log.d(TAG, "onResponse: ${test}")
+                    Log.d(TAG, "onResponse: ${response?.body()?.mealServiceDietInfo?.get(1)?.row?.get(0)?.MMEAL_SC_CODE}")
                 }
             }
 
@@ -126,7 +151,6 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
         calendar.setTime(currentDate)
         return calendar.get(Calendar.DAY_OF_WEEK)
     }
-    @RequiresApi(Build.VERSION_CODES.O)
     fun getTimeTable(){
         var apiInterface = ApiClient.getRetrofit().create(ApiInterface ::class.java)
         var call = apiInterface.getSpecializedTimetable(
@@ -184,18 +208,15 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
                             )
                             Log.d(TAG, "onResponse for loop 1: ${timetable}")
                         }
-                        val currentTime = getCurrentPeriod(LocalTime.now(),timetables)
+                        val currentTime = getCurrentPeriod(LocalTime.of(15, 10),timetables)
                         Log.d(TAG, "onResponse: ${currentTime}")
                         if(currentTime.toInt() <= array.size){
                             recyclerView.scrollToPosition(currentTime.toInt() - 1)
                         }
                         adapter.notifyDataSetChanged()
-                    }else {
-
                     }
                 }
             }
-
             override fun onFailure(call: Call<HisTimeTableData>, t: Throwable) {
                 Log.d(TAG, "onFailure: ${t}")
             }
@@ -209,7 +230,6 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
         val date = current.format(formatter)
         return date
     }
-    @RequiresApi(Build.VERSION_CODES.O)
     fun getShowDate() : String{
         val current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("M월d일(${week.get(getCurrentWeek()-1)})")
@@ -224,14 +244,26 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
     }
     fun getCurrentPeriod(currentTime: LocalTime, timetable: Map<Int, LocalTime>): String {
         for ((period, startTime) in timetable) {
-            val endTime = startTime.plusMinutes(60)
-
-            if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
+            if (currentTime.isBefore(startTime)) {
                 return period.toString()
             }
         }
 
-        return "0"// 아직 수업이 시작하지 않았음을 나타내는 값
+        return "0" // 아직 수업이 시작하지 않았음을 나타내는 값
+    }
+    fun getCurrentMealTime(currentTime: LocalTime, mealTimes: Map<String, LocalTime>): String {
+        for ((period, startTime) in mealTimes) {
+            if (currentTime.isBefore(startTime)) {
+                Log.d(TAG, "getCurrentMealTime: ${currentTime} ${period}")
+                return period.toString()
+            }
+        }
+
+        return "2" // 아직 수업이 시작하지 않았음을 나타내는 값
+    }
+    fun getMealSetting() : Boolean{
+        val sharedPreferences = activity?.getSharedPreferences("Userinfo",0)
+        return sharedPreferences?.getBoolean("homeMealSetting",false)!!
     }
 }
 

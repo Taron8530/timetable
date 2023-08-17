@@ -85,6 +85,7 @@ interface ApiInterface {
         @Query("pSize") pSize : Int,
         @Query("ATPT_OFCDC_SC_CODE") scCode: String,
         @Query("SD_SCHUL_CODE") schoolCode : String,
+        @Query("MMEAL_SC_CODE") mealScCode : String,
         @Query("MLSV_YMD") days:String
     ) : Call<SchoolMealData>
 

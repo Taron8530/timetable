@@ -25,8 +25,24 @@
         android:id="@+id/profile_edit_school"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="152dp"
         android:text="정보 수정"
-        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_schoolName" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/mealSetting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="홈에서 중식만 보기"
+        android:thumb="@drawable/thumb"
+        app:track="@drawable/track"
+        android:background="@color/white"
+        android:padding="10dp"
+        android:layout_marginHorizontal="50dp"
+        app:layout_constraintBottom_toTopOf="@+id/profile_edit_school"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_schoolName" />

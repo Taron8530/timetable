@@ -1,12 +1,15 @@
 package com.example.timetable
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.widget.TextView
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
-
+@RequiresApi(Build.VERSION_CODES.O)
 class MainActivity : AppCompatActivity() {
     lateinit var homeFragment : HomeFragment
     lateinit var timeTableFragment : TimeTableFragment
@@ -43,7 +46,8 @@ class MainActivity : AppCompatActivity() {
                     supportFragmentManager.beginTransaction().replace(R.id.fl_container, timeTableFragment).commit()
                 }
                 R.id.lunch -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.fl_container, mealFragment).commit()
+//                    supportFragmentManager.beginTransaction().replace(R.id.fl_container, mealFragment).commit()
+                    Toast.makeText(applicationContext,"준비중입니다.",Toast.LENGTH_SHORT).show()
                 }
                 R.id.account -> {
                     supportFragmentManager.beginTransaction().replace(R.id.fl_container, profileFragment).commit()
