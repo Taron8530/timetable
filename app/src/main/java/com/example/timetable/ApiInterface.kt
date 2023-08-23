@@ -89,6 +89,19 @@ interface ApiInterface {
         @Query("MLSV_YMD") days:String
     ) : Call<SchoolMealData>
 
+//    AcademicCalendarData
+    @GET("SchoolSchedule")
+    fun getSchoolAcademicCalendar(
+        @Query("KEY") key: String,
+        @Query("Type") type : String,
+        @Query("pIndex") pIndex : Int,
+        @Query("pSize") pSize : Int,
+        @Query("ATPT_OFCDC_SC_CODE") officeCode:String,
+        @Query("SD_SCHUL_CODE") schoolCode:String,
+        @Query("AA_FROM_YMD") startDate : String,
+        @Query("AA_TO_YMD") endDate:String
+    ) : Call<AcademicCalendarData>
+
 //    @GET("schoolInfo")
 //    fun getSchoolInfo(
 //        @Query("KEY") key: String,

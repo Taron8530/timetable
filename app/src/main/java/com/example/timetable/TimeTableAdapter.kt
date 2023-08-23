@@ -45,7 +45,7 @@ class TimeTableAdapter(private val timeTable: ArrayList<TimeTableData>) :
             6 to LocalTime.of(15,0),
             7 to LocalTime.of(16,0)
         )
-        val currentTime = LocalTime.of(15, 10)
+        val currentTime = LocalTime.now()
         private val className: TextView = itemView.findViewById(R.id.className)
         private val layout : LinearLayout = itemView.findViewById(R.id.periodLinearLayout)
         private val period : TextView = itemView.findViewById(R.id.period)

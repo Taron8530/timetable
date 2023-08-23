@@ -1,9 +1,7 @@
 package com.example.timetable
 
-import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -14,7 +12,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var homeFragment : HomeFragment
     lateinit var timeTableFragment : TimeTableFragment
     lateinit var profileFragment : ProfileFragment
-    lateinit var mealFragment: MealFragment
+    lateinit var academicCalendarFragment: AcademicCalendarFragment
     lateinit var schoolCode : String
     lateinit var department : String
     lateinit var grade : String
@@ -34,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         homeFragment = HomeFragment(schoolInfo)
         timeTableFragment = TimeTableFragment(schoolInfo)
         profileFragment = ProfileFragment(schoolInfo)
-        mealFragment = MealFragment(schoolInfo)
+        academicCalendarFragment = AcademicCalendarFragment(schoolInfo)
 
         var bnv_main = findViewById(R.id.mainBottomNavigationView) as BottomNavigationView
         bnv_main.run { setOnNavigationItemSelectedListener {
@@ -45,8 +43,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.time_table -> {
                     supportFragmentManager.beginTransaction().replace(R.id.fl_container, timeTableFragment).commit()
                 }
-                R.id.lunch -> {
-//                    supportFragmentManager.beginTransaction().replace(R.id.fl_container, mealFragment).commit()
+                R.id.academicCalendar -> {
+                    supportFragmentManager.beginTransaction().replace(R.id.fl_container, academicCalendarFragment).commit()
                     Toast.makeText(applicationContext,"준비중입니다.",Toast.LENGTH_SHORT).show()
                 }
                 R.id.account -> {

@@ -82,7 +82,7 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
 //        val showDate = LocalDateTime.now().format(fotmat)
         val date = getDate()
         var apiInterface = ApiClient.getRetrofit().create(ApiInterface :: class.java)
-        val mealScCode = getCurrentMealTime(LocalTime.of(17,1),mealTimes)
+        val mealScCode = getCurrentMealTime(LocalTime.now(),mealTimes)
         var call = apiInterface.getSchoolLunch(
             resources.getString(R.string.education_api_key),
             "json",

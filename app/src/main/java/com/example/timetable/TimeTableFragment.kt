@@ -19,7 +19,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
-
+@RequiresApi(Build.VERSION_CODES.O)
 class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
     lateinit var root : View
     lateinit var tableLayout: TableLayout
@@ -55,7 +55,7 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     fun getTimeTable(){
         val (start, end) = getStartAndEndOfThisWeek()
-        weekDate.setText("$start ~ $end")
+        weekDate.setText("이번주 시간표 (${start.slice(4..7)} ~ ${end.slice(4..7)})")
 
         Log.d(TAG, "getTimeTable: ${start} , end ${end}")
         var api : ApiInterface = ApiClient.getRetrofit().create(ApiInterface::class.java)
@@ -108,6 +108,7 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
                                 TableLayout.LayoutParams.MATCH_PARENT,
                                 TableLayout.LayoutParams.WRAP_CONTENT
                             )
+                            Log.d(TAG, "onResponse: ${parsedData}")
                             Log.d(TAG, "onResponse: Period: $period 교시")
                             val periodTextView = createTextView()
                             periodTextView.text = "${period}교시"
@@ -160,7 +161,6 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
 
         val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
         val weekdays = listOf("월", "화", "수", "목", "금")
-        val periods = listOf("1", "2", "3", "4", "5", "6", "7")
 
         for (row in timetableData.hisTimetable[1].row) {
             val dateStr = row.ALL_TI_YMD
@@ -195,17 +195,6 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
         column.setBackgroundResource(R.drawable.cell_background)
         column.setPadding(margin, margin, margin, margin)
         return column
-    }
-    fun getCurrentPeriod(currentTime: LocalTime, timetable: Map<Int, LocalTime>): String {
-        for ((period, startTime) in timetable) {
-            val endTime = startTime.plusMinutes(60) // 50분 간격
-
-            if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
-                return period.toString()
-            }
-        }
-
-        return "0"// 아직 수업이 시작하지 않았음을 나타내는 값
     }
 
 }
