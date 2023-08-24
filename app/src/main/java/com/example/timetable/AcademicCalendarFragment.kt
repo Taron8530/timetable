@@ -71,7 +71,7 @@ class AcademicCalendarFragment(val schoolInfo : SchoolInfo) : Fragment() , onCal
         getSelectCalendar(CalendarUtil.currentDate.toString().replace("-",""))
     }
     fun monthTearFromDate(date:LocalDate) : String{
-        var formatter = DateTimeFormatter.ofPattern("MM월 yyyy")
+        var formatter = DateTimeFormatter.ofPattern("MM월 yyyy년")
         return date.format(formatter)
     }
     fun getSelectCalendar(selectDate : String){
@@ -118,7 +118,7 @@ class AcademicCalendarFragment(val schoolInfo : SchoolInfo) : Fragment() , onCal
             }
 
             override fun onFailure(call: Call<AcademicCalendarData>, t: Throwable) {
-                TODO("Not yet implemented")
+                Log.d(TAG, "onFailure: ${t}")
             }
 
         })
@@ -180,7 +180,7 @@ class AcademicCalendarFragment(val schoolInfo : SchoolInfo) : Fragment() , onCal
         //첫 번째날 요일 가져오기(월:1, 일: 7)
         var dayOfWeek = firstDay.dayOfWeek.value
 
-        for(i in 1..38){
+        for(i in 1..41){
             if(i <= dayOfWeek || i > (lastDay + dayOfWeek)){
                 dayList.add("")
             }else{
