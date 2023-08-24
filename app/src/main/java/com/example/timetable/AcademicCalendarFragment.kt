@@ -9,11 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
 import retrofit2.Response
+import retrofit2.Retrofit
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -28,7 +30,10 @@ class AcademicCalendarFragment(val schoolInfo : SchoolInfo) : Fragment() , onCal
     lateinit var nextMonth: Button
     lateinit var academicCalendar : RecyclerView // 달력
     lateinit var academicCalendarView : RecyclerView // 학사일정 출력
-    lateinit var apiDateInfo : ArrayList<AcademicCalendarData.schoolSchedule.Row>
+    lateinit var apiDateInfo : ArrayList<String>
+    lateinit var scheduleList : ArrayList<String>
+
+    lateinit var scheduleAdapter : SelectAcademicCalendarAdapter
     val WEEKDATA = listOf<String>("일","월","화","수","목","금","토")
 
     override fun onCreateView(
@@ -50,7 +55,10 @@ class AcademicCalendarFragment(val schoolInfo : SchoolInfo) : Fragment() , onCal
         lastMonth = root.findViewById(R.id.lastMonth)
         nextMonth = root.findViewById(R.id.nextMonth)
         academicCalendar = root.findViewById(R.id.academicCalendar)
+        academicCalendarView = root.findViewById(R.id.academicCalendarView)
         CalendarUtil.currentDate = LocalDate.now()
+        apiDateInfo = ArrayList()
+        scheduleList = ArrayList()
     }
     fun setMonthView(){
         currentDate.setText(monthTearFromDate(CalendarUtil.currentDate))
@@ -60,10 +68,60 @@ class AcademicCalendarFragment(val schoolInfo : SchoolInfo) : Fragment() , onCal
         academicCalendar.layoutManager = manager
         academicCalendar.adapter = adapter
         Log.d(TAG, "setMonthView: ${daylist}")
+        getSelectCalendar(CalendarUtil.currentDate.toString().replace("-",""))
     }
     fun monthTearFromDate(date:LocalDate) : String{
         var formatter = DateTimeFormatter.ofPattern("MM월 yyyy")
         return date.format(formatter)
+    }
+    fun getSelectCalendar(selectDate : String){
+        Log.d(TAG, "getSelectCalendar: ${CalendarUtil.currentDate.toString().replace("-","")}")
+        val apiInterface = ApiClient.getRetrofit().create(ApiInterface :: class.java)
+        val call = apiInterface.getSchoolSelectAcademicCalendar(
+            resources.getString(R.string.education_api_key)
+        ,"json",
+            1,
+            100,
+            schoolInfo.schoolOfficeCode,
+            schoolInfo.schoolCode,
+            selectDate
+        )
+        call.enqueue(object : retrofit2.Callback<AcademicCalendarData>{
+            override fun onResponse(
+                call: Call<AcademicCalendarData>,
+                response: Response<AcademicCalendarData>
+            ) {
+                if(response.isSuccessful){
+//                    val result = response.body()?.SchoolSchedule?.get(1)?.row
+                    val result = response?.body()?.SchoolSchedule?.get(1)?.row
+                    Log.d(TAG, "onResponse selectSchedule: ${result} ")
+                    if(result != null) {
+                        scheduleList.clear()
+                        for (i in result) {
+                            Log.d(TAG, "onResponse selectSchedule: ${result} 일정 ${i.EVENT_NM}")
+                            scheduleList.add(i.EVENT_NM)
+                        }
+                        Log.d(TAG, "onResponse: 리스트 확인 ${scheduleList}")
+                        scheduleAdapter = SelectAcademicCalendarAdapter(scheduleList)
+                        academicCalendarView.layoutManager = GridLayoutManager(activity?.applicationContext, 1)
+                        academicCalendarView.adapter = scheduleAdapter
+                        scheduleAdapter.notifyDataSetChanged()
+                    }else{
+                        if(::scheduleAdapter.isInitialized){
+                            scheduleList.clear()
+                            scheduleAdapter.notifyDataSetChanged()
+                        }
+
+                    }
+
+                }
+            }
+
+            override fun onFailure(call: Call<AcademicCalendarData>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
     fun getCalendar(){
         var startDate = CalendarUtil.currentDate.withDayOfMonth(1).toString().replace("-","")
@@ -75,7 +133,7 @@ class AcademicCalendarFragment(val schoolInfo : SchoolInfo) : Fragment() , onCal
         val apiInterface = ApiClient.getRetrofit().create(ApiInterface :: class.java)
         val call = apiInterface.getSchoolAcademicCalendar(
             resources.getString(R.string.education_api_key),
-            "json",1,5,schoolInfo.schoolOfficeCode,schoolInfo.schoolCode,startDate,endDate
+            "json",1,100,schoolInfo.schoolOfficeCode,schoolInfo.schoolCode,startDate,endDate
         )
         call.enqueue(object : retrofit2.Callback<AcademicCalendarData>{
             override fun onResponse(
@@ -83,9 +141,19 @@ class AcademicCalendarFragment(val schoolInfo : SchoolInfo) : Fragment() , onCal
                 response: Response<AcademicCalendarData>
             ) {
                 if(response.isSuccessful && response.body() != null){
-                    Log.d(TAG, "onResponse: ${response.body()!!.SchoolSchedule.get(1)?.row}")
-                    apiDateInfo = response.body()!!.SchoolSchedule.get(1)?.row as ArrayList<AcademicCalendarData.schoolSchedule.Row>
-                    setMonthView()
+                    val result = response.body()?.SchoolSchedule?.get(1)?.row
+                    apiDateInfo.clear()
+                    Log.d(TAG, "onResponse:s${response} ${result?.size}")
+//                    apiDateInfo = response.body()!!.SchoolSchedule.get(1)?.row as ArrayList<AcademicCalendarData.schoolSchedule.Row>
+                    if(result != null) {
+                        for (i in result) {
+
+                            var dates = if(i.AA_YMD.slice(6..7).startsWith("0")) i.AA_YMD[i.AA_YMD.length-1].toString() else i.AA_YMD.slice(6..7).toString()
+                            Log.d(TAG, "onResponse: 여긴 ${dates} ${i.EVENT_NM} ${result.size}")
+                            apiDateInfo.add(dates)
+                        }
+                        setMonthView()
+                    }
                 }
             }
 
@@ -112,7 +180,7 @@ class AcademicCalendarFragment(val schoolInfo : SchoolInfo) : Fragment() , onCal
         //첫 번째날 요일 가져오기(월:1, 일: 7)
         var dayOfWeek = firstDay.dayOfWeek.value
 
-        for(i in 1..41){
+        for(i in 1..38){
             if(i <= dayOfWeek || i > (lastDay + dayOfWeek)){
                 dayList.add("")
             }else{
@@ -148,6 +216,7 @@ class AcademicCalendarFragment(val schoolInfo : SchoolInfo) : Fragment() , onCal
         var year = CalendarUtil.currentDate.year.toString()
         val requestData = year+month + days
         Log.d(TAG, "onItemClick: ${requestData}")
+        getSelectCalendar(requestData)
 
     }
 }

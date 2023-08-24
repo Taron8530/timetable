@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.academicCalendar -> {
                     supportFragmentManager.beginTransaction().replace(R.id.fl_container, academicCalendarFragment).commit()
-                    Toast.makeText(applicationContext,"준비중입니다.",Toast.LENGTH_SHORT).show()
                 }
                 R.id.account -> {
                     supportFragmentManager.beginTransaction().replace(R.id.fl_container, profileFragment).commit()

@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 @RequiresApi(Build.VERSION_CODES.O)
 class CalendarAdapter(private val dayList: ArrayList<String>,
                       private val onItemListener: onCalendarClickListener,
-                        private val apiDateInfo : ArrayList<AcademicCalendarData.schoolSchedule.Row>):
+                        private val apiDateInfo : ArrayList<String>):
     RecyclerView.Adapter<CalendarAdapter.ItemViewHolder>() {
     val TAG ="CalendarAdapter"
     var selectPosition = -1
@@ -40,7 +40,7 @@ class CalendarAdapter(private val dayList: ArrayList<String>,
         var day = dayList[holder.adapterPosition]
 
 //        holder.dayText.text = day]
-        Log.d(TAG, "onBindViewHolder: ${day.equals(CalendarUtil.currentDate)} ${day} / ${CalendarUtil.currentDate} / ${apiDateInfo.get(1).AA_YMD}")
+        Log.d(TAG, "onBindViewHolder: ${day.equals(CalendarUtil.currentDate)} ${day} / ${CalendarUtil.currentDate} / ${apiDateInfo}")
         if(day.equals("")){
             holder.dayText.text = ""
         }else{
@@ -64,6 +64,11 @@ class CalendarAdapter(private val dayList: ArrayList<String>,
         }else if( position == 0 || position % 7 == 0){ //일요일은 빨강
             holder.dayText.setTextColor(Color.RED)
             Log.d(TAG, "onBindViewHolder: position ${position}")
+        }
+        if(day in apiDateInfo){
+            holder.scheduleCheck.visibility = View.VISIBLE
+        }else{
+            holder.scheduleCheck.visibility = View.GONE
         }
 
         //날짜 클릭 이벤트
