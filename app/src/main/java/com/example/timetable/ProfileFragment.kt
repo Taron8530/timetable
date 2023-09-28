@@ -36,7 +36,6 @@ class ProfileFragment(var schoolInfo : SchoolInfo) : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         init()
-
         setListener()
 
     }

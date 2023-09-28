@@ -100,7 +100,7 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
 
                     }else{
                         val parsedData = parseTimetableData(timetableData)
-                        val margin = resources.getDimensionPixelSize(R.dimen.cell_margin)
+//                        val margin = resources.getDimensionPixelSize(R.dimen.cell_margin)
                         for ((period, subjects) in parsedData) {
                             val row = TableRow(context)
 
@@ -115,8 +115,12 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
                             row.addView(periodTextView)
                             for (subject in subjects) {
                                 val subjectTextView = createTextView()
+                                if(subject.equals("")){
+                                    subjectTextView.text = "정보 없음"
+                                }else{
+                                    subjectTextView.text = subject
+                                }
                                 subjectTextView.setTextSize(12F)
-                                subjectTextView.text = subject
                                 row.addView(subjectTextView)
                                 Log.d(TAG, "onResponse:  Subject: $subject")
                             }

@@ -219,4 +219,5 @@ class AcademicCalendarFragment(val schoolInfo : SchoolInfo) : Fragment() , onCal
         getSelectCalendar(requestData)
 
     }
+
 }

@@ -2,10 +2,14 @@ package com.example.timetable
 
 import android.os.Build
 import android.os.Bundle
+import android.view.Gravity
+import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 @RequiresApi(Build.VERSION_CODES.O)
 class MainActivity : AppCompatActivity() {
@@ -19,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var classNum : String
     lateinit var line : String
     lateinit var schoolOfficeCode: String
+    lateinit var topMenuButton : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         getSharedPreference()
         var schoolInfo = SchoolInfo(schoolOfficeCode,schoolCode, line,department, grade, classNum)
         homeFragment = HomeFragment(schoolInfo)
+        topMenuButton = findViewById(R.id.menu_button)
         timeTableFragment = TimeTableFragment(schoolInfo)
         profileFragment = ProfileFragment(schoolInfo)
         academicCalendarFragment = AcademicCalendarFragment(schoolInfo)
@@ -55,7 +61,18 @@ class MainActivity : AppCompatActivity() {
             selectedItemId = R.id.home
         }
         initTopBar()
+//        initOnclickListener()
     }
+
+//    fun initOnclickListener(){
+//        topMenuButton.setOnClickListener{
+//            if(topMenuDrawerLayout.isDrawerOpen(Gravity.RIGHT)){
+//                topMenuDrawerLayout.openDrawer(Gravity.RIGHT)
+//            }else{
+//                topMenuDrawerLayout.closeDrawer(Gravity.RIGHT)
+//            }
+//        }
+//    }
 
 
     fun initTopBar(){

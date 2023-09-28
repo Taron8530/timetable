@@ -74,11 +74,11 @@ class CalendarAdapter(private val dayList: ArrayList<String>,
         //날짜 클릭 이벤트
         holder.itemView.setOnClickListener {
             //인터페이스를 통해 날짜를 넘겨준다.
-            onItemListener.onItemClick(day)
-            if(holder.adapterPosition !in 0..6){
+            if(holder.adapterPosition !in 0..6 && !day.equals("")){
+                onItemListener.onItemClick(day)
                 selectPosition = holder.adapterPosition
+                notifyDataSetChanged()
             }
-            notifyDataSetChanged()
         }
     }
 

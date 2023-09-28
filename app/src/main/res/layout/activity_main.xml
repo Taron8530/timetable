@@ -5,17 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+
     <TextView
         android:id="@+id/homeFragmentTopBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="10dp"
         android:fontFamily="@font/topbar_font"
+        android:paddingHorizontal="10dp"
+        app:layout_constrainedWidth="true"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:text="삼일 공업 고등학교 공유경제 시스템과 3학년 1반"
-        android:textSize="18dp"
+        android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/menu_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     <FrameLayout
@@ -26,6 +29,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@id/mainBottomNavigationView"
         app:layout_constraintTop_toBottomOf="@id/homeFragmentTopBar">
+
     </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -38,5 +42,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/main_navigationbar" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/menu_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/ic_menu_foreground"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
