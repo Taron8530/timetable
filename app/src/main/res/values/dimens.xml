@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="row_spacing">10dp</dimen> <!-- 간격 조절을 원하는 만큼 설정 -->
+    <dimen name="row_spacing">10dp</dimen>
     <dimen name="column_spacing">10dp</dimen>
     <dimen name="start_padding">10dp</dimen>
     <dimen name="cell_margin">5dp</dimen>
+    <dimen name="hamberger_topmargin">10dp</dimen>
 </resources>

@@ -28,8 +28,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="시간"
-                android:layout_margin="3dp"
+                android:padding="3dp"
                 android:gravity="center"/>
 
             <TextView
@@ -37,8 +36,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="월"
+                android:padding="3dp"
                 android:background="@drawable/cell_background"
-                android:layout_margin="3dp"
                 android:gravity="center"/>
 
             <!-- 화, 수, 목, 금 교시 추가 -->
@@ -47,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="화"
-                android:layout_margin="3dp"
+                android:padding="3dp"
                 android:gravity="center"
                 android:background="@drawable/cell_background" />
 
@@ -56,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="수"
-                android:layout_margin="3dp"
+                android:padding="3dp"
                 android:gravity="center"
                 android:background="@drawable/cell_background" />
 
@@ -65,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="목"
-                android:layout_margin="3dp"
+                android:padding="3dp"
                 android:gravity="center"
                 android:background="@drawable/cell_background" />
 
@@ -74,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="금"
-                android:layout_margin="3dp"
+                android:padding="3dp"
                 android:gravity="center"
                 android:background="@drawable/cell_background" />
         </TableRow>

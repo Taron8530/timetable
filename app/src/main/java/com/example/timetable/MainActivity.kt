@@ -1,7 +1,9 @@
 package com.example.timetable
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
@@ -13,6 +15,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 @RequiresApi(Build.VERSION_CODES.O)
 class MainActivity : AppCompatActivity() {
+    val TAG ="MainActivity"
     lateinit var homeFragment : HomeFragment
     lateinit var timeTableFragment : TimeTableFragment
     lateinit var profileFragment : ProfileFragment
@@ -24,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var line : String
     lateinit var schoolOfficeCode: String
     lateinit var topMenuButton : Button
+    lateinit var drawerLayout: DrawerLayout
+    lateinit var SchoolName : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         timeTableFragment = TimeTableFragment(schoolInfo)
         profileFragment = ProfileFragment(schoolInfo)
         academicCalendarFragment = AcademicCalendarFragment(schoolInfo)
+        drawerLayout = findViewById(R.id.drawer_layout)
 
         var bnv_main = findViewById(R.id.mainBottomNavigationView) as BottomNavigationView
         bnv_main.run { setOnNavigationItemSelectedListener {
@@ -52,27 +58,28 @@ class MainActivity : AppCompatActivity() {
                 R.id.academicCalendar -> {
                     supportFragmentManager.beginTransaction().replace(R.id.fl_container, academicCalendarFragment).commit()
                 }
-                R.id.account -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.fl_container, profileFragment).commit()
-                }
             }
             true
         }
             selectedItemId = R.id.home
         }
+        initHambegerMenu()
         initTopBar()
-//        initOnclickListener()
+        initOnclickListener()
     }
 
-//    fun initOnclickListener(){
-//        topMenuButton.setOnClickListener{
-//            if(topMenuDrawerLayout.isDrawerOpen(Gravity.RIGHT)){
-//                topMenuDrawerLayout.openDrawer(Gravity.RIGHT)
-//            }else{
-//                topMenuDrawerLayout.closeDrawer(Gravity.RIGHT)
-//            }
-//        }
-//    }
+    fun initOnclickListener(){
+        topMenuButton.setOnClickListener{
+            Log.d(TAG, "initOnclickListener: dfdfd")
+            if(drawerLayout.isDrawerOpen(Gravity.RIGHT)){
+                Log.d(TAG, "initOnclickListener: open")
+                drawerLayout.closeDrawer(Gravity.RIGHT)
+            }else{
+                Log.d(TAG, "initOnclickListener: close")
+                drawerLayout.openDrawer(Gravity.RIGHT)
+            }
+        }
+    }
 
 
     fun initTopBar(){
@@ -91,6 +98,18 @@ class MainActivity : AppCompatActivity() {
         classNum = getSharedPreferenceKey("classNumber")
         line = getSharedPreferenceKey("line")
         schoolOfficeCode = getSharedPreferenceKey("schoolOfficeCode")
+    }
+    fun initHambegerMenu(){
+        SchoolName = findViewById(R.id.school_name_hamberger)
+        var classInfo = findViewById<TextView>(R.id.classInfoHamberger)
+        var schoolName = getSharedPreferenceKey("schoolName")
+        if(line.equals("일반고")){
+            SchoolName.setText(schoolName)
+            classInfo.setText("${grade} 학년 ${classNum} 반")
+            return
+        }
+        classInfo.setText("${department}\n${grade} 학년 ${classNum} 반")
+        SchoolName.setText(schoolName)
     }
     fun getSharedPreferenceKey(key:String) : String{
         var sharedPreferences = getSharedPreferences("Userinfo",0)

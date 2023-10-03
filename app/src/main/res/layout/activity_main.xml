@@ -1,57 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/blue"
+    android:id="@+id/drawer_layout"
+    android:layout_gravity="right"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/homeFragmentTopBar"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/topbar_font"
-        android:paddingHorizontal="10dp"
-        app:layout_constrainedWidth="true"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:text="삼일 공업 고등학교 공유경제 시스템과 3학년 1반"
-        android:textSize="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/menu_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    <FrameLayout
-        android:id="@+id/fl_container"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/mainBottomNavigationView"
-        app:layout_constraintTop_toBottomOf="@id/homeFragmentTopBar">
+        android:layout_height="match_parent">
 
-    </FrameLayout>
+        <LinearLayout
+            android:id="@+id/top_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/mainBottomNavigationView"
-        android:layout_width="408dp"
-        android:layout_height="66dp"
-        app:itemIconTint="@color/black"
-        app:itemTextColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/main_navigationbar" />
+            <TextView
+                android:id="@+id/homeFragmentTopBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:fontFamily="@font/topbar_font"
+                android:paddingHorizontal="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="삼일 공업 고등학교 공유경제 시스템과 3학년 1반"
+                android:textSize="15dp"
+                app:layout_constrainedWidth="true" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/menu_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/ic_menu_foreground"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/menu_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/ic_menu_foreground"
 
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+                />
+        </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <FrameLayout
+            android:id="@+id/fl_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/mainBottomNavigationView"
+            app:layout_constraintTop_toBottomOf="@id/top_layout">
+
+        </FrameLayout>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/mainBottomNavigationView"
+            android:layout_width="408dp"
+            android:layout_height="66dp"
+            app:itemIconTint="@color/black"
+            app:itemTextColor="@color/black"
+            android:background="@color/bottomNaviColor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/main_navigationbar" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include
+        layout="@layout/drawerlayout"/>
+
+</androidx.drawerlayout.widget.DrawerLayout>

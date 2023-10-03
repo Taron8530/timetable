@@ -112,6 +112,7 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
                             Log.d(TAG, "onResponse: Period: $period 교시")
                             val periodTextView = createTextView()
                             periodTextView.text = "${period}교시"
+                            periodTextView.typeface = resources.getFont(R.font.topbar_font)
                             row.addView(periodTextView)
                             for (subject in subjects) {
                                 val subjectTextView = createTextView()
@@ -121,6 +122,9 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
                                     subjectTextView.text = subject
                                 }
                                 subjectTextView.setTextSize(12F)
+                                subjectTextView.width = 100
+                                subjectTextView.height = 150
+                                subjectTextView.setPadding(10,10,10,10)
                                 row.addView(subjectTextView)
                                 Log.d(TAG, "onResponse:  Subject: $subject")
                             }
