@@ -125,6 +125,7 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
                                 subjectTextView.width = 100
                                 subjectTextView.height = 150
                                 subjectTextView.setPadding(10,10,10,10)
+                                subjectTextView.textAlignment = View.TEXT_ALIGNMENT_CENTER
                                 row.addView(subjectTextView)
                                 Log.d(TAG, "onResponse:  Subject: $subject")
                             }

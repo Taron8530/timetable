@@ -10,7 +10,7 @@
         android:id="@+id/currentDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/topMargin"
         android:gravity="center"
         android:text="정보 불러오는중.."
         android:textSize="25sp"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:text="＜"
         android:textSize="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/topMargin"
         app:layout_constraintEnd_toStartOf="@+id/currentDate"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:text="＞"
         android:textSize="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/topMargin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/currentDate"
         app:layout_constraintTop_toTopOf="parent" />
