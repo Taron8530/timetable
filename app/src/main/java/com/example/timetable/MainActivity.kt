@@ -1,20 +1,25 @@
 package com.example.timetable
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
+import android.widget.CompoundButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomnavigation.BottomNavigationView
 @RequiresApi(Build.VERSION_CODES.O)
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),MealSettingClickListener {
     val TAG ="MainActivity"
     lateinit var homeFragment : HomeFragment
     lateinit var timeTableFragment : TimeTableFragment
@@ -29,6 +34,11 @@ class MainActivity : AppCompatActivity() {
     lateinit var topMenuButton : Button
     lateinit var drawerLayout: DrawerLayout
     lateinit var SchoolName : TextView
+    private lateinit var editProfile : Button
+    private lateinit var mealSetting : androidx.appcompat.widget.SwitchCompat
+    private lateinit var mealSettingSharedPreferences: SharedPreferences
+    private lateinit var mealSettingEditor : SharedPreferences.Editor
+    private var mealSettingChecked : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         init()
     }
     fun init(){
+        Log.d(TAG, "init: ")
         getSharedPreference()
         var schoolInfo = SchoolInfo(schoolOfficeCode,schoolCode, line,department, grade, classNum)
         homeFragment = HomeFragment(schoolInfo)
@@ -100,7 +111,16 @@ class MainActivity : AppCompatActivity() {
         schoolOfficeCode = getSharedPreferenceKey("schoolOfficeCode")
     }
     fun initHambegerMenu(){
+        Log.d(TAG, "initHambegerMenu: ")
         SchoolName = findViewById(R.id.school_name_hamberger)
+        editProfile = findViewById(R.id.profile_edit_school)
+        mealSetting = findViewById(R.id.mealSetting)
+        mealSettingSharedPreferences = getSharedPreferences("Userinfo", AppCompatActivity.MODE_PRIVATE)
+        mealSettingChecked = mealSettingSharedPreferences.getBoolean("homeMealSetting",false)
+        Log.d(TAG, "initHambegerMenu: ${mealSettingChecked}")
+        mealSettingEditor = mealSettingSharedPreferences.edit()
+        mealSetting.isChecked = mealSettingChecked
+        setHamburgerListener()
         var classInfo = findViewById<TextView>(R.id.classInfoHamberger)
         var schoolName = getSharedPreferenceKey("schoolName")
         if(line.equals("일반고")){
@@ -111,8 +131,40 @@ class MainActivity : AppCompatActivity() {
         classInfo.setText("${department}\n${grade} 학년 ${classNum} 반")
         SchoolName.setText(schoolName)
     }
+    fun setHamburgerListener(){
+        Log.d(TAG, "setHamburgerListener: ")
+        editProfile.setOnClickListener{
+            val sharedPreferences = getSharedPreferences("Userinfo",0)
+            val editor = sharedPreferences?.edit()
+            Log.d(TAG, "onClick: "+ editor?.clear())
+            editor?.clear()
+            if(editor?.commit() == true){
+                val intent = Intent(applicationContext,LoginActivity :: class.java)
+                startActivity(intent)
+                finish()
+            }
+        }
+        mealSetting.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener{
+            override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
+                Log.d(TAG, "onCheckedChanged: ${isChecked}")
+                mealSettingEditor.putBoolean("homeMealSetting",isChecked)
+                mealSettingEditor.commit()
+                supportFragmentManager.beginTransaction().replace(R.id.fl_container, homeFragment).commit()
+                refreshFragment(homeFragment, supportFragmentManager)
+            }
+
+        })
+    }
+    fun refreshFragment(fragment: Fragment, fragmentManager: FragmentManager) {
+        var ft: FragmentTransaction = fragmentManager.beginTransaction()
+        ft.detach(fragment).attach(fragment).commit()
+    }
     fun getSharedPreferenceKey(key:String) : String{
         var sharedPreferences = getSharedPreferences("Userinfo",0)
         return sharedPreferences.getString(key,"").toString()
+    }
+
+    override fun mealClick() {
+        TODO("Not yet implemented")
     }
 }

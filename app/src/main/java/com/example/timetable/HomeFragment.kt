@@ -22,7 +22,7 @@ import java.util.Date
 
 // 조식 코드 : 1, 중식 코드 : 2, 석식 코드 : 3
 @RequiresApi(Build.VERSION_CODES.O)
-class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
+class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment()  {
     lateinit var root : View
     lateinit var todayLunch : TextView
     lateinit var todayLunchBanner : TextView
@@ -65,7 +65,9 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment() {
         initView()
         getLunch()
         getTimeTable()
+
     }
+
 
     fun initView(){
         todayLunch = root.findViewById(R.id.todayLunch)

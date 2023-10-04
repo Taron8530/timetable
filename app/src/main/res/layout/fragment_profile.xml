@@ -6,50 +6,50 @@
     android:layout_height="match_parent"
     tools:context=".ProfileFragment">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+<!--    <ScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent">-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:orientation="vertical">
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:padding="10dp"-->
+<!--            android:orientation="vertical">-->
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/mealSetting"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="50dp"
-                android:background="@color/white"
-                android:padding="10dp"
-                android:text="홈에서 중식만 보기"
-                android:thumb="@drawable/thumb"
-                app:track="@drawable/track" />
+<!--            <androidx.appcompat.widget.SwitchCompat-->
+<!--                android:id="@+id/mealSetting"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginHorizontal="50dp"-->
+<!--                android:background="@color/white"-->
+<!--                android:padding="10dp"-->
+<!--                android:text="홈에서 중식만 보기"-->
+<!--                android:thumb="@drawable/thumb"-->
+<!--                app:track="@drawable/track" />-->
 
-            <TextView
-                android:id="@+id/profile_schoolName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="13dp"
-                android:text="ddddd"
-                android:textSize="19dp"
-                android:visibility="gone" />
+<!--            <TextView-->
+<!--                android:id="@+id/profile_schoolName"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:gravity="center"-->
+<!--                android:padding="13dp"-->
+<!--                android:text="ddddd"-->
+<!--                android:textSize="19dp"-->
+<!--                android:visibility="gone" />-->
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/profile_edit_school"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/change_my_info"
-                android:layout_gravity="center"
-                android:text="정보 수정" />
+<!--            <androidx.appcompat.widget.AppCompatButton-->
+<!--                android:id="@+id/profile_edit_school"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@drawable/change_my_info"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:text="정보 수정" />-->
 
-        </LinearLayout>
-    </ScrollView>
+<!--        </LinearLayout>-->
+<!--    </ScrollView>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

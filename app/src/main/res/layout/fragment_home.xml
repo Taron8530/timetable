@@ -34,7 +34,7 @@
     </LinearLayout>
 
     <TextView
-        android:textColor="@color/white"
+        android:textStyle="bold"
         android:id="@+id/lunch_show_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -64,8 +64,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:textColor="@color/white"
         android:text="오늘의 시간표"
+        android:textStyle="bold"
         android:fontFamily="@font/topbar_font"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -75,7 +75,7 @@
         android:id="@+id/homeTodayDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
+        android:textStyle="bold"
         android:layout_marginTop="8dp"
         android:layout_marginRight="10dp"
         android:fontFamily="@font/topbar_font"
