@@ -140,7 +140,7 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment()  {
     }
     fun removeParentheses(input: String): String {
         var result = input
-        val regex = "\\([^*)]+\\)".toRegex() // 정규식 패턴: 괄호와 괄호 안의 내용을 찾음
+        val regex = "[@wu]|\\\\ ([^*)]+\\\\)".toRegex() // 정규식 패턴: 괄호와 괄호 안의 내용을 찾음
 
         // 정규식에 해당하는 부분을 공백으로 대체하여 제거
         result = result.replace(regex, "")

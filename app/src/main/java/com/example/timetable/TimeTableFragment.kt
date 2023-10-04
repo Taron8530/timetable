@@ -55,7 +55,7 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     fun getTimeTable(){
         val (start, end) = getStartAndEndOfThisWeek()
-        weekDate.setText("이번주 시간표 (${start.slice(4..7)} ~ ${end.slice(4..7)})")
+        weekDate.setText("이번주 시간표(${start.slice(4..5)}월${start.slice(6..7)}일 ~ ${end.slice(4..5)}월${end.slice(6..7)}일)")
 
         Log.d(TAG, "getTimeTable: ${start} , end ${end}")
         var api : ApiInterface = ApiClient.getRetrofit().create(ApiInterface::class.java)

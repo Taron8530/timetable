@@ -10,6 +10,7 @@
         android:id="@+id/time_table_week"
         android:textSize="15dp"
         android:gravity="right"
+        android:textStyle="bold"
         android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
