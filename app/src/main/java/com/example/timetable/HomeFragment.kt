@@ -123,7 +123,7 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment()  {
                     if(response?.body()?.mealServiceDietInfo?.get(0)?.head?.get(0)?.list_total_count ==3){
                         test = removeParentheses(response?.body()?.mealServiceDietInfo?.get(1)?.row?.get(1)?.DDISH_NM?.replace("<br/>","\n").toString())
                     }
-                    if(test.equals("null")){
+                    if(test.equals("nll")){
                         lunch.setText("교육정보개방포털에서 비공개된 자료로 \n 급식정보가 없습니다.")
                     }else{
                         lunch.setText(test)
@@ -140,10 +140,10 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment()  {
     }
     fun removeParentheses(input: String): String {
         var result = input
-        val regex = "[@wu]|\\\\ ([^*)]+\\\\)".toRegex() // 정규식 패턴: 괄호와 괄호 안의 내용을 찾음
+        val regex = "\\([^*)]+\\)".toRegex()// 정규식 패턴: 괄호와 괄호 안의 내용을 찾음
 
         // 정규식에 해당하는 부분을 공백으로 대체하여 제거
-        result = result.replace(regex, "")
+        result = result.replace(regex, "").replace("[@wu]".toRegex(),"")
 
         return result.trim() // 문자열 앞뒤의 공백 제거 후 반환
     }
