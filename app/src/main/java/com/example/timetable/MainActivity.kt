@@ -2,6 +2,9 @@ package com.example.timetable
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.media.audiofx.BassBoost
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -11,13 +14,20 @@ import android.widget.Button
 import android.widget.CompoundButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.messaging.FirebaseMessaging
+
 @RequiresApi(Build.VERSION_CODES.O)
 class MainActivity : AppCompatActivity(),MealSettingClickListener {
     val TAG ="MainActivity"
@@ -43,8 +53,10 @@ class MainActivity : AppCompatActivity(),MealSettingClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        getPermission()
         init()
+
+        getToken()
     }
     fun init(){
         Log.d(TAG, "init: ")
@@ -166,5 +178,41 @@ class MainActivity : AppCompatActivity(),MealSettingClickListener {
 
     override fun mealClick() {
         TODO("Not yet implemented")
+    }
+    fun getToken(){
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("testt", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+            Log.d("testt", token)
+        })
+    }
+    fun getPermission(){
+        if (ContextCompat.checkSelfPermission (this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            val reqPerm = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+
+                if (isGranted) {
+
+                } else {
+
+                }
+            }
+            reqPerm.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 }
