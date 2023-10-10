@@ -161,8 +161,6 @@ class MainActivity : AppCompatActivity(),MealSettingClickListener {
                 Log.d(TAG, "onCheckedChanged: ${isChecked}")
                 mealSettingEditor.putBoolean("homeMealSetting",isChecked)
                 mealSettingEditor.commit()
-                supportFragmentManager.beginTransaction().replace(R.id.fl_container, homeFragment).commit()
-                refreshFragment(homeFragment, supportFragmentManager)
             }
 
         })

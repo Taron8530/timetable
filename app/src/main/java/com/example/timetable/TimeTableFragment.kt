@@ -123,7 +123,7 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
                                 }
                                 subjectTextView.setTextSize(12F)
                                 subjectTextView.width = 100
-                                subjectTextView.height = 150
+                                subjectTextView.height = 155
                                 subjectTextView.setPadding(10,10,10,10)
                                 subjectTextView.textAlignment = View.TEXT_ALIGNMENT_CENTER
                                 row.addView(subjectTextView)
@@ -155,9 +155,6 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
         val end = start.plusDays(4)
 
         return Pair(getFormattedDate(start), getFormattedDate(end))
-    }
-    fun testGetWeek() : Pair<String,String>{
-        return Pair("20230821","20230825")
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun getFormattedDate(date: LocalDate): String {
@@ -204,6 +201,11 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
         column.setBackgroundResource(R.drawable.cell_background)
         column.setPadding(margin, margin, margin, margin)
         return column
+    }
+    fun emptyTimeTableCreate(){
+        for(i in 1..7){
+
+        }
     }
 
 }

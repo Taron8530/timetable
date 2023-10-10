@@ -3,9 +3,7 @@
     <style name="Base.Theme.Timetable" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-        <item name="colorPrimary">@color/main_color</item>
-
-        <item name="colorPrimaryVariant">@color/main_color</item>
+        <item name="colorPrimaryDark">#4682B4</item>
     </style>
     <style name="Theme.Timetable" parent="Base.Theme.Timetable" />
 </resources>

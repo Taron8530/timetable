@@ -3,6 +3,7 @@ package com.example.timetable
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -14,6 +15,7 @@ import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import kotlinx.coroutines.selects.select
@@ -21,8 +23,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
-
+@RequiresApi(Build.VERSION_CODES.O)
 class LoginActivity : AppCompatActivity() {
     var TAG = "LoginActivity"
     lateinit var schoolName: EditText
@@ -65,8 +66,6 @@ class LoginActivity : AppCompatActivity() {
         initOnClickListener()
 
         onItemSelectSpinner()
-
-        Log.d(TAG, "onCreate: ")
 
 
     }
