@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:textSize="25dp"
+        android:textStyle="bold"
 
         android:text="학교 선택"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,7 +25,9 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="15dp"
+        android:padding="10dp"
         android:textSize="15dp"
+        android:layout_marginEnd="10dp"
         android:hint="학교 이름을 적어주세요"
         android:lines="1"
         android:singleLine="true"
@@ -36,7 +39,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/school_office_code" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatButton
+        android:background="@drawable/login_btn"
         android:id="@+id/search_button"
         android:layout_width="55dp"
         android:layout_height="40dp"
@@ -67,7 +71,7 @@
         app:layout_constraintStart_toEndOf="@+id/school_department"
         app:layout_constraintTop_toBottomOf="@+id/school_name" />
 
-    <Spinner
+    <androidx.appcompat.widget.AppCompatSpinner
         android:id="@+id/school_office_code"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
