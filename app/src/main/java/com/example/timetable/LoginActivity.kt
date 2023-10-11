@@ -216,6 +216,7 @@ class LoginActivity : AppCompatActivity() {
                 if (editor.commit()) {
                     var intent = Intent(applicationContext, MainActivity::class.java)
                     startActivity(intent)
+                    finish()
                 } else {
                     Toast.makeText(
                         applicationContext,
@@ -323,5 +324,8 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+    }
+    fun checkNetwork(){
+
     }
 }
