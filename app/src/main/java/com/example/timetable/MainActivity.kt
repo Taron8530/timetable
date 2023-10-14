@@ -3,13 +3,10 @@ package com.example.timetable
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.media.audiofx.BassBoost
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
-import android.view.View
 import android.widget.Button
 import android.widget.CompoundButton
 import android.widget.TextView
@@ -17,8 +14,6 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -49,13 +44,14 @@ class MainActivity : AppCompatActivity(),MealSettingClickListener {
     private lateinit var mealSettingSharedPreferences: SharedPreferences
     private lateinit var mealSettingEditor : SharedPreferences.Editor
     private var mealSettingChecked : Boolean = false
+    private var networkChecked : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        networkCheck()
         getPermission()
         init()
-
         getToken()
     }
     fun init(){
@@ -68,9 +64,15 @@ class MainActivity : AppCompatActivity(),MealSettingClickListener {
         profileFragment = ProfileFragment(schoolInfo)
         academicCalendarFragment = AcademicCalendarFragment(schoolInfo)
         drawerLayout = findViewById(R.id.drawer_layout)
-
+        setBottomNavigationBar()
+        initHambegerMenu()
+        initTopBar()
+        initOnclickListener()
+    }
+    fun setBottomNavigationBar(){
         var bnv_main = findViewById(R.id.mainBottomNavigationView) as BottomNavigationView
         bnv_main.run { setOnNavigationItemSelectedListener {
+
             when(it.itemId) {
                 R.id.home -> {
                     supportFragmentManager.beginTransaction().replace(R.id.fl_container, homeFragment).commit()
@@ -85,10 +87,8 @@ class MainActivity : AppCompatActivity(),MealSettingClickListener {
             true
         }
             selectedItemId = R.id.home
+
         }
-        initHambegerMenu()
-        initTopBar()
-        initOnclickListener()
     }
 
     fun initOnclickListener(){
@@ -204,6 +204,14 @@ class MainActivity : AppCompatActivity(),MealSettingClickListener {
             reqPerm.launch(android.Manifest.permission.POST_NOTIFICATIONS)
 
         }
+    }
+    // 네트워크 체트 함수
+    fun networkCheck() : Boolean {
+        val networkManager = NetworkManager()
+        if(!networkManager.checkNetworkState(this)) {  // 네트워크 연결 안된 상태
+            return true
+        }
+        return false
     }
 
     override fun onRequestPermissionsResult(
