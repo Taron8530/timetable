@@ -1,5 +1,6 @@
 package com.example.timetable
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -32,6 +33,11 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
     val TAG = "TimeTableFragment"
     val layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f)
     lateinit var weekDate: TextView
+    private lateinit var context : Context
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        this.context = context
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -112,7 +118,7 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
                             Log.d(TAG, "onResponse: Period: $period 교시")
                             val periodTextView = createTextView()
                             periodTextView.text = "${period}교시"
-                            periodTextView.typeface = resources.getFont(R.font.topbar_font)
+                            periodTextView.typeface = context.resources.getFont(R.font.topbar_font)
                             row.addView(periodTextView)
                             for (subject in subjects) {
                                 val subjectTextView = createTextView()
@@ -194,7 +200,7 @@ class TimeTableFragment(val schoolInfo: SchoolInfo) : Fragment() {
     }
     fun createTextView() : TextView{
         var column :TextView = TextView(context)
-        val margin = resources.getDimensionPixelSize(R.dimen.cell_margin)
+        val margin = context.resources.getDimensionPixelSize(R.dimen.cell_margin)
         column.layoutParams = layoutParams
         column.gravity = Gravity.CENTER
         column.textAlignment = View.TEXT_ALIGNMENT_INHERIT

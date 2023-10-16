@@ -1,5 +1,6 @@
 package com.example.timetable
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -34,7 +35,11 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment()  {
     val classNum = schoolInfo.classNum
     val TAG = "HomeFragment"
     val week = listOf<String>("일","월","화","수","목","금","토")
-
+    private lateinit var context : Context
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        this.context = context
+    }
 
     val timetables = mapOf(
         1 to LocalTime.of(9, 0),  // 1교시 시작 시간
@@ -185,7 +190,7 @@ class HomeFragment( val schoolInfo:SchoolInfo ) : Fragment()  {
         val recyclerView: RecyclerView = root.findViewById(R.id.recyclerView)
         Log.d(TAG, "getTimeTable: ${timetable}")
         val adapter = TimeTableAdapter(timetable)
-        recyclerView.layoutManager = GridLayoutManager(activity?.applicationContext, 1)
+        recyclerView.layoutManager = GridLayoutManager(context, 1)
         recyclerView.adapter = adapter
         call.enqueue(object : Callback<HisTimeTableData>{
             override fun onResponse(

@@ -1,5 +1,6 @@
 package com.example.timetable
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -35,7 +36,11 @@ class AcademicCalendarFragment(val schoolInfo : SchoolInfo) : Fragment() , onCal
 
     lateinit var scheduleAdapter : SelectAcademicCalendarAdapter
     val WEEKDATA = listOf<String>("일","월","화","수","목","금","토")
-
+    private lateinit var context : Context
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        this.context = context
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -78,7 +83,7 @@ class AcademicCalendarFragment(val schoolInfo : SchoolInfo) : Fragment() , onCal
         Log.d(TAG, "getSelectCalendar: ${CalendarUtil.currentDate.toString().replace("-","")}")
         val apiInterface = ApiClient.getRetrofit().create(ApiInterface :: class.java)
         val call = apiInterface.getSchoolSelectAcademicCalendar(
-            resources.getString(R.string.education_api_key)
+            context.resources.getString(R.string.education_api_key)
         ,"json",
             1,
             100,
@@ -103,7 +108,7 @@ class AcademicCalendarFragment(val schoolInfo : SchoolInfo) : Fragment() , onCal
                         }
                         Log.d(TAG, "onResponse: 리스트 확인 ${scheduleList}")
                         scheduleAdapter = SelectAcademicCalendarAdapter(scheduleList)
-                        academicCalendarView.layoutManager = GridLayoutManager(activity?.applicationContext, 1)
+                        academicCalendarView.layoutManager = GridLayoutManager(context, 1)
                         academicCalendarView.adapter = scheduleAdapter
                         scheduleAdapter.notifyDataSetChanged()
                     }else{

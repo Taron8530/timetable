@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity(),MealSettingClickListener {
     val TAG ="MainActivity"
     lateinit var homeFragment : HomeFragment
     lateinit var timeTableFragment : TimeTableFragment
-    lateinit var profileFragment : ProfileFragment
     lateinit var academicCalendarFragment: AcademicCalendarFragment
     lateinit var schoolCode : String
     lateinit var department : String
@@ -63,7 +62,6 @@ class MainActivity : AppCompatActivity(),MealSettingClickListener {
         homeFragment = HomeFragment(schoolInfo)
         topMenuButton = findViewById(R.id.menu_button)
         timeTableFragment = TimeTableFragment(schoolInfo)
-        profileFragment = ProfileFragment(schoolInfo)
         academicCalendarFragment = AcademicCalendarFragment(schoolInfo)
         drawerLayout = findViewById(R.id.drawer_layout)
         setBottomNavigationBar()
