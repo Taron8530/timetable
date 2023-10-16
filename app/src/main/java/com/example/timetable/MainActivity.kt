@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
+import android.view.View
 import android.widget.Button
 import android.widget.CompoundButton
 import android.widget.TextView
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity(),MealSettingClickListener {
     lateinit var topMenuButton : Button
     lateinit var drawerLayout: DrawerLayout
     lateinit var SchoolName : TextView
+    lateinit var networkCheckTextView : TextView
     private lateinit var editProfile : Button
     private lateinit var mealSetting : androidx.appcompat.widget.SwitchCompat
     private lateinit var mealSettingSharedPreferences: SharedPreferences
@@ -49,9 +51,9 @@ class MainActivity : AppCompatActivity(),MealSettingClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        networkCheck()
         getPermission()
         init()
+        networkCheck()
         getToken()
     }
     fun init(){
@@ -127,6 +129,7 @@ class MainActivity : AppCompatActivity(),MealSettingClickListener {
         SchoolName = findViewById(R.id.school_name_hamberger)
         editProfile = findViewById(R.id.profile_edit_school)
         mealSetting = findViewById(R.id.mealSetting)
+        networkCheckTextView = findViewById(R.id.network_checked)
         mealSettingSharedPreferences = getSharedPreferences("Userinfo", AppCompatActivity.MODE_PRIVATE)
         mealSettingChecked = mealSettingSharedPreferences.getBoolean("homeMealSetting",false)
         Log.d(TAG, "initHambegerMenu: ${mealSettingChecked}")
@@ -205,13 +208,30 @@ class MainActivity : AppCompatActivity(),MealSettingClickListener {
 
         }
     }
-    // 네트워크 체트 함수
-    fun networkCheck() : Boolean {
-        val networkManager = NetworkManager()
-        if(!networkManager.checkNetworkState(this)) {  // 네트워크 연결 안된 상태
-            return true
+    // 네트워크 확인 함수
+    private fun networkCheck() {
+        var networkConnection = NetworkConnection(this)
+        networkConnection.observe(this) { isConnected ->
+            if (isConnected){
+                networkTryCheck()
+                init()
+            }else {
+                networkCheckTextView.visibility = View.VISIBLE
+            }
+            Log.d(TAG, "networkCheck: $isConnected")
         }
-        return false
+
+    }
+    private fun networkTryCheck(){
+        var networkManager = NetworkManager()
+        Log.d(TAG, "networkCheck: 여기 들어옴? ${networkManager.checkNetworkState(this)}")
+        if(networkManager.checkNetworkState(this)){
+            networkCheckTextView.visibility = View.GONE
+            Log.d(TAG, "networkCheck: 조건 충족")
+        }else{ //네트워크 연결 안된 상태
+            networkCheckTextView.visibility = View.VISIBLE
+            Log.d(TAG, "networkCheck: 조건 불 만")
+        }
     }
 
     override fun onRequestPermissionsResult(
