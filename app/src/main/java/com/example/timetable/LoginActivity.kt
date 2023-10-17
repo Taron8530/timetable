@@ -107,7 +107,7 @@ class LoginActivity : AppCompatActivity() {
                 dialog.setOnClickListener(object : SchoolInfoDialog.OnDialogClickListener {
                     override fun onClicked(schoolInfo: schoolInfoData.SchoolInfo.Row) {
                         Log.d(TAG, "onClicked: 학교 계역 ${schoolInfo.HS_SC_NM}")
-                        if (schoolInfo?.HS_SC_NM?.trim().equals("")) {
+                        if (schoolInfo?.HS_SC_NM?.trim().equals("") || schoolInfo?.HS_SC_NM == null) {
                             Toast.makeText(
                                 applicationContext,
                                 "현재 고등학교만 지원하고 있습니다.",
@@ -172,13 +172,13 @@ class LoginActivity : AppCompatActivity() {
                         }
                         schoolCheck = true
                         searchSchoolName.isClickable = false
-                        searchSchoolName.setBackgroundColor(resources.getColor(R.color.gray))
-                        schoolName.setBackgroundColor(resources.getColor(R.color.gray))
+                        searchSchoolName.setBackgroundColor(getColor(R.color.gray))
+                        schoolName.setBackgroundColor(getColor(R.color.gray))
                         schoolName.setText(schoolInfo.SCHUL_NM)
                         selectSchoolInfo = schoolInfo
 
-                        schoolOfficeSpinner.setBackgroundColor(resources.getColor(R.color.gray))
-                        schoolOfficeSpinner.isClickable = false
+//                        schoolOfficeSpinner.setBackgroundColor(getColor(R.color.gray))
+//                        schoolOfficeSpinner.isClickable = false
                         Log.d(
                             TAG,
                             "onClicked: 학교이름{${schoolInfo.SCHUL_NM}} 학교 코드 : {${schoolInfo.SD_SCHUL_CODE}} 계열명 : ${schoolInfo.HS_SC_NM}"
@@ -191,13 +191,10 @@ class LoginActivity : AppCompatActivity() {
             schoolName.text.clear()
             schoolCheck = false
             searchSchoolName.isClickable = true
-            searchSchoolName.setBackgroundColor(getColor(R.color.white))
-            schoolName.setBackgroundColor(resources.getColor(R.color.white))
+            searchSchoolName.setBackgroundResource(R.drawable.login_btn)
+            schoolName.setBackgroundColor(getColor(R.color.white))
             schoolDepartmentSpinner.visibility = View.GONE
 
-            schoolOfficeSpinner.setBackgroundColor(resources.getColor(R.color.white))
-            schoolOfficeSpinner.isClickable = true
-            schoolOfficeCodeCheck = false
         })
         signInButton.setOnClickListener(View.OnClickListener {
             val checked = classCheck && gradeCheck && schoolCheck && departmentCheck

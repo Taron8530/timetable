@@ -14,16 +14,16 @@
         android:textColor="@color/black"
         android:padding="10dp"
         android:background="@drawable/period_textview"
-        android:layout_weight="3"
-        android:text="TextView" />
+        android:layout_weight="1"
+        android:text="1교시" />
 
     <TextView
         android:id="@+id/className"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:fontFamily="@font/topbar_font"
-        android:layout_weight="110"
+        android:layout_weight="1000"
         android:textSize="16sp" />
 
 </LinearLayout>
