@@ -228,6 +228,7 @@ class MainActivity : AppCompatActivity(),MealSettingClickListener {
             Log.d(TAG, "networkCheck: 조건 충족")
         }else{ //네트워크 연결 안된 상태
             networkCheckTextView.visibility = View.VISIBLE
+            networkCheckTextView.bringToFront();
             Log.d(TAG, "networkCheck: 조건 불 만")
         }
     }
