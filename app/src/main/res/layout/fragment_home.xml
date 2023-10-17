@@ -26,10 +26,10 @@
             android:layout_height="match_parent"
             android:background="@color/white"
             android:fontFamily="@font/topbar_font"
+            android:gravity="center"
             android:lineSpacingExtra="3dp"
             android:padding="10dp"
-            android:gravity="center"
-            android:text="TextView"
+            android:text="🍚 급식 정보 불러오는 중 🍚"
             android:textAlignment="center" />
     </LinearLayout>
 

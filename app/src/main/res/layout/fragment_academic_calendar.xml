@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/topMargin"
         android:fontFamily="@font/topbar_font"
+        android:textStyle="bold"
         android:gravity="center"
         android:text="정보 불러오는중.."
         android:padding="10dp"
