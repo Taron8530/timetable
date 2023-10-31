@@ -9,6 +9,7 @@
 # 💻 Skills
  - **Android**
    - Kotlin
+   - [![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=깃허브 아이디)](https://github.com/anuraghazra/github-readme-stats)
  - **Collaboration**
    - Slack
    - Notion
@@ -23,3 +24,6 @@
 # 🔨 개발 환경
  - Android Studio
  - Visual Studio Code
+# 😎 프로젝트를 하며 느낀점
+
+
