@@ -215,6 +215,7 @@ class MainActivity : AppCompatActivity(),MealSettingClickListener {
                 init()
             }else {
                 networkCheckTextView.visibility = View.VISIBLE
+                networkCheckTextView.bringToFront();
             }
             Log.d(TAG, "networkCheck: $isConnected")
         }
