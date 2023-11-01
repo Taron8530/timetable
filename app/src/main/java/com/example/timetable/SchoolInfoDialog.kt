@@ -20,7 +20,7 @@ class SchoolInfoDialog(private val context : Context,private var schoolName : St
     private lateinit var schoolInfo : RecyclerView
     private lateinit var onClickListener : OnDialogClickListener
     private lateinit var schoolInfoAdapter : SchoolInfoAdapter
-    private var data = listOf<schoolInfoData.SchoolInfo.Row>()
+    private var data = mutableListOf<schoolInfoData.SchoolInfo.Row>()
     lateinit var progressBar : ProgressBar
     lateinit var progressBarComment : TextView
     fun setOnClickListener(listener: OnDialogClickListener)
@@ -72,7 +72,7 @@ class SchoolInfoDialog(private val context : Context,private var schoolName : St
                         Log.d(TAG, "onResponse: ${response.body()?.schoolInfo.toString()}")
                         dialog.dismiss()
                     }else{
-                        var result: List<schoolInfoData.SchoolInfo.Row> = response.body()?.schoolInfo?.get(1)?.row!!.toList()
+                        var result: MutableList<schoolInfoData.SchoolInfo.Row> = response.body()?.schoolInfo?.get(1)?.row!!.toList() as MutableList<schoolInfoData.SchoolInfo.Row>
                         Log.d(TAG, "onResponse 성공: " + result);
                         Log.d(TAG, "onResponse:111 "+result[0].SCHUL_NM)
                         schoolInfo.setHasFixedSize(true)
@@ -81,6 +81,7 @@ class SchoolInfoDialog(private val context : Context,private var schoolName : St
                         schoolInfo.adapter = schoolInfoAdapter
                         schoolInfoAdapter.setList(result)
                         data = result
+                        deleteExceptionSchool()
                         showProgress(false)
                         schoolInfoAdapter.notifyDataSetChanged()
                     }
@@ -103,6 +104,20 @@ class SchoolInfoDialog(private val context : Context,private var schoolName : St
                 Log.d(TAG, "onFailure 에러: " + t.message.toString());
             }
         })
+    }
+    fun deleteExceptionSchool(){ // 중학교와 초등학교를 제외시키는 코드
+        var removeItemList = ArrayList<schoolInfoData.SchoolInfo.Row>()
+        for (i in data){
+            if(i.SCHUL_NM.endsWith("중학교") || i.SCHUL_NM.endsWith("초등학교")){
+                removeItemList.add(i)
+            }
+        }
+        data.removeAll(removeItemList)
+        if(data.size <= 0){
+            Toast.makeText(context,"검색 결과가 없습니다. 현재 고등학교만 지원하고 있습니다.",Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+        schoolInfoAdapter.notifyDataSetChanged()
     }
     interface OnDialogClickListener
     {
