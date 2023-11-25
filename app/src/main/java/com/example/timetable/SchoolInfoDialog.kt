@@ -66,7 +66,6 @@ class SchoolInfoDialog(private val context : Context,private var schoolName : St
             override fun onResponse(call: Call<schoolInfoData>, response: Response<schoolInfoData>) {
                 if(response.isSuccessful){
                     // 정상적으로 통신이 성고된 경우
-                    var test: String = response.body()?.schoolInfo.toString()
                     if(response.body()?.schoolInfo == null){
                         Toast.makeText(context,"검색결과가 없습니다", Toast.LENGTH_SHORT).show()
                         Log.d(TAG, "onResponse: ${response.body()?.schoolInfo.toString()}")
